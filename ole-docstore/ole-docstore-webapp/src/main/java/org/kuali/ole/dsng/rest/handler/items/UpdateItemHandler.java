@@ -12,7 +12,6 @@ import org.kuali.ole.docstore.engine.service.storage.rdbms.pojo.ItemRecord;
 import org.kuali.ole.dsng.model.ItemRecordAndDataMapping;
 import org.kuali.ole.dsng.rest.handler.Handler;
 
-
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.*;
@@ -63,6 +62,8 @@ public class UpdateItemHandler extends Handler {
                             if (null != dataMapping) {
                                 processOverlay(exchange, dataMapping, itemRecord);
                             }
+                            if(itemRecord.getBarCode().endsWith("x"))
+                                itemRecord.setBarCode(itemRecord.getBarCode().toUpperCase());
                             itemRecords.add(itemRecord);
                         }
                     } catch (Exception e) {
