@@ -143,25 +143,36 @@ public class BatchExportUtil extends BatchUtil {
                             addDocType = true;
                             queryBuilder.append(buildFilterQueryForTypeDate("statusUpdatedOn",filterCriteriaList.get(i)));
                             break;
-                        case "Date Updated":
+                        case "Date Updated(of Bib, Holdings or Item)":
+                            addDocType = true;
                             queryBuilder.append(buildFilterQueryForTypeDate("dateUpdated",filterCriteriaList.get(i)));
                             break;
-                        case "Date Entered":
+                        case "Date Entered(of Bib, Holdings or Item)":
+                            addDocType = true;
                             queryBuilder.append(buildFilterQueryForTypeDate("dateEntered",filterCriteriaList.get(i)));
                             break;
-                        case "Created By":
+                        case "Created By(of Bib, Holdings or Item)":
+                            addDocType=true;
                             if (StringUtils.isNotBlank(filterCriteriaList.get(i).getFieldValue())) {
                                 queryBuilder.append("(createdBy:" + filterCriteriaList.get(i).getFieldValue() + ")");
                             }
                             break;
-                        case "Updated By":
+                        case "Updated By(of Bib, Holdings or Item)":
+                            addDocType = true;
                             if (StringUtils.isNotBlank(filterCriteriaList.get(i).getFieldValue())) {
                                 queryBuilder.append("(updatedBy:" + filterCriteriaList.get(i).getFieldValue() + ")");
                             }
                             break;
                         case "Staff Only(of Bib, Holdings or Item)":
+                            addDocType = true;
                             if (StringUtils.isNotBlank(filterCriteriaList.get(i).getFieldValue())) {
                                 queryBuilder.append("(staffOnlyFlag:" + filterCriteriaList.get(i).getFieldValue() + ")");
+                            }
+                            break;
+                        case "Resource Type":
+                            addDocType=true;
+                            if (StringUtils.isNotBlank(filterCriteriaList.get(i).getFieldValue())) {
+                                queryBuilder.append("(ResourceType_search:" + filterCriteriaList.get(i).getFieldValue() + ")");
                             }
                             break;
                     }

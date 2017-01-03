@@ -114,6 +114,9 @@ public class CheckinItemController extends OLEUifControllerBase {
 
         if (null != droolsResponse && StringUtils.isBlank(droolsResponse.getErrorMessage().getErrorMessage())) {
             postCheckinProcess(checkinForm, result, request, response);
+        } else if(droolsResponse.getErrorMessage().getErrorMessage().equalsIgnoreCase("Item is marked as lost and/or replacement fee has been billed.Item should only be returned if item has been found.")&& null!= droolsResponse){
+            checkinForm.setErrorMessage(droolsResponse.getErrorMessage());
+            showDialog("checkinRequestExistDialog", checkinForm, request, response);
         } else if (droolsResponse.retriveErrorCode().equalsIgnoreCase(DroolsConstants.ITEM_LOST)) {
             handleLostItemProcess(request, response, checkinForm, droolsResponse);
         } else if (droolsResponse.retriveErrorCode().equalsIgnoreCase(DroolsConstants.ITEM_DAMAGED)) {
@@ -229,8 +232,11 @@ public class CheckinItemController extends OLEUifControllerBase {
         } else if (null != droolsResponse.retriveErrorCode() && droolsResponse.retriveErrorCode().equalsIgnoreCase(DroolsConstants.CHECKIN_REQUEST_EXITS_FOR_THIS_ITEM)) {
             handleCheckinRequestExistsProcess(request, response, checkinForm, droolsResponse);
         }
+
         if(StringUtils.isBlank(checkinForm.getLightboxScript())) {
-            checkinForm.setLightboxScript("jq('#checkIn-Item_control').focus(); validateCheckInDate();");
+            checkinForm.setLightboxScript("jq('#checkIn-Item_control').focus(); validateCheckInDate();jq.fancybox.close();");
+        }else{
+            checkinForm.setLightboxScript(checkinForm.getLightboxScript()+"jq.fancybox.close();");
         }
         return getUIFModelAndView(checkinForm);
     }

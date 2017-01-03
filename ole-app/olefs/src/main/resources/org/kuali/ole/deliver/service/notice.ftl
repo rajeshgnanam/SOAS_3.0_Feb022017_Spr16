@@ -33,7 +33,7 @@
 
     </TR>
 
-    <TR>
+    <#--<TR>
         <TD>${oleNoticeContentConfigurationBo.getFieldLabel("Patron Name")} :</TD>
         <#if oleNoticeBo.patronName ??  >
             <TD>${oleNoticeBo.patronName}</TD>
@@ -41,7 +41,7 @@
            <TD></TD>
         </#if>
 
-    </TR>
+    </TR>-->
     <TR>
         <TD>${oleNoticeContentConfigurationBo.getFieldLabel("Address")} :</TD>
         <#if oleNoticeBo.patronAddress??>

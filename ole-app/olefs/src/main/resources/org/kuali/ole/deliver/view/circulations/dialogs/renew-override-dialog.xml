@@ -76,6 +76,13 @@
         <property name="renderAddLine" value="false"/>
         <property name="layoutManager.richTable.render" value="true"/>
         <property name="layoutManager.richTable.disableTableSort" value="true" />
+        <property name="layoutManager.richTable.templateOptions">
+            <map merge="true">
+                <entry key="bPaginate" value="true"/>
+                <entry key="bFilter" value="false"/>
+                <entry key="iDisplayLength" value="100"/>
+            </map>
+        </property>
         <property name="footer">
             <bean id="circ_renewFooters" parent="Uif-LookupResultsFooter">
                 <property name="items">
@@ -112,7 +119,7 @@
                 <bean id="circ_renewDueDateForNonCirculatingItem" parent="Uif-VerticalFieldGroup" p:label="Due Date" p:render="@{#line.nonCirculatingItem eq true}">
                     <property name="items">
                         <list>
-                            <bean id="circ_renewDueDateForNonCirculatingItem_Date" parent="Loan-Uif-InputField" p:propertyName="renewalDateMap" p:render="@{#line.nonCirculatingItem eq true}">
+                            <bean id="circ_renewDueDateForNonCirculatingItem_Date" parent="Loan-Uif-InputField" p:propertyName="renewalDateMap" p:render="@{#line.nonCirculatingItem eq true}" p:required="true">
                                 <property name="control">
                                     <bean parent="Uif-DateControl" p:size="10" />
                                 </property>
@@ -147,7 +154,7 @@
 
                 <bean id="circ_renewNoofRenew" parent="Uif-DataField" p:label="No Of Renew" p:width="5%" p:propertyName="numberOfRenewals"/>
 
-                <bean id="circ_renewDateRenewal" parent="Uif-DataField" p:label="Message(s)" p:width="25%" p:propertyName="errorMessage"/>
+                <bean id="circ_renewMessage" parent="Uif-DataField" p:label="Message(s)" p:width="25%" p:propertyName="errorMessage"/>
 
             </list>
         </property>

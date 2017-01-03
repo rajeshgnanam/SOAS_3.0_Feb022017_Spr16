@@ -180,7 +180,10 @@ public class SerialReceivingSearchServiceImpl implements SerialReceivingSearchSe
                 }
             }
         }
-        List<OLESerialReceivingDocument> oleSerialReceivingDocument = (List<OLESerialReceivingDocument>) getBusinessObjectService().findMatching(OLESerialReceivingDocument.class, instanceValue);
+        List<OLESerialReceivingDocument> oleSerialReceivingDocument = new ArrayList<>();
+        if(instanceValue.size()!=0) {
+            oleSerialReceivingDocument = (List<OLESerialReceivingDocument>) getBusinessObjectService().findMatching(OLESerialReceivingDocument.class, instanceValue);
+        }
         if (oleSerialReceivingDocument.isEmpty()) {
             oleSerialReceivingRecord.setAction(OLEConstants.SERIAL_SEARCH_CREATE_NEW);
             oleSerialReceivingRecord.setHref("serialReceiving?viewId=OLESerialReceivingView&amp;methodToCall=docHandler&amp;command=initiate&amp;bibId=" + oleSerialReceivingRecord.getBibId() + "&amp;instanceId=" + oleSerialReceivingRecord.getInstanceId());

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -114,7 +115,7 @@ public abstract class NoticeMailContentFormatter {
         oleNoticeBo.setItemCallNumber(oleLoanDocument.getItemCallNumber() != null ? oleLoanDocument.getItemCallNumber() : "");
         oleNoticeBo.setItemCallNumberPrefix(oleLoanDocument.getItemCallNumberPrefix()!=null ? oleLoanDocument.getItemCallNumberPrefix() : "");
         oleNoticeBo.setCopyNumber(oleLoanDocument.getItemCopyNumber() != null ? oleLoanDocument.getItemCopyNumber() : "");
-        oleNoticeBo.setDueDateString(oleLoanDocument.getLoanDueDate() != null ? (oleLoanDocument.getLoanDueDate().toString() != null ? oleLoanDocument.getLoanDueDate().toString() : "") : "");
+        oleNoticeBo.setDueDateString(oleLoanDocument.getLoanDueDate() != null ? (oleLoanDocument.getLoanDueDate().toString() != null ? new SimpleDateFormat("dd-MM-yyyy").format(oleLoanDocument.getLoanDueDate()).toString() : "") : "");
         oleNoticeBo.setItemId(oleLoanDocument.getItemId() != null ? oleLoanDocument.getItemId() : "");
         oleNoticeBo.setItemShelvingLocation((getLocationName(oleLoanDocument.getItemLocation()) != null ? getLocationName(oleLoanDocument.getItemLocation()) : ""));
         oleNoticeBo.setCheckInDate(oleLoanDocument.getCheckInDate() != null ? (StringUtils.isNotBlank(oleLoanDocument.getCheckInDate().toString()) ? oleLoanDocument.getCheckInDate().toString() : "") : "");

@@ -114,7 +114,7 @@
                         <bean id="olePatronSave" parent="OlePatron-Uif-SaveAction" p:ajaxSubmit="false" p:render="@{#actionFlags[#Constants.KUALI_ACTION_CAN_SAVE]}" p:focusOnIdAfterSubmit="TOP" p:jumpToIdAfterSubmit="TOP"/>
                         <bean id="olePatronReload" parent="Uif-SecondaryActionButton" p:ajaxSubmit="false" p:methodToCall="reload" p:actionLabel="Reload"
                               p:render="@{#actionFlags[#Constants.KUALI_ACTION_CAN_RELOAD]}" p:focusOnIdAfterSubmit="TOP" p:jumpToIdAfterSubmit="TOP"/>
-                        <bean id="olePatronBlanketApprove" parent="Uif-SecondaryActionButton" p:ajaxSubmit="false" p:methodToCall="blanketApprove" p:actionLabel="Blanket Approve" p:performClientSideValidation="true"
+                        <bean id="olePatronBlanketApprove" parent="Uif-SecondaryActionButton" p:ajaxSubmit="false" p:methodToCall="route" p:actionLabel="Blanket Approve" p:performClientSideValidation="true"
                               p:render="@{#actionFlags[#Constants.KUALI_ACTION_CAN_BLANKET_APPROVE]}" p:focusOnIdAfterSubmit="TOP" p:jumpToIdAfterSubmit="TOP"/>
                         <bean id="olePatronApprove" parent="Uif-SecondaryActionButton" p:ajaxSubmit="false" p:methodToCall="approve" p:actionLabel="Approve"  p:performClientSideValidation="true"
                               p:render="@{#actionFlags[#Constants.KUALI_ACTION_CAN_APPROVE]}" p:focusOnIdAfterSubmit="TOP" p:jumpToIdAfterSubmit="TOP"/>
@@ -647,7 +647,7 @@
                         <list>
                             <bean parent="OlePatron-InputField" p:propertyName="olePatronId" p:readOnly="true">
                                 <property name="control">
-                                    <bean parent="Uif-TextControl" p:size="10" p:maxLength="10"/>
+                                    <bean parent="Uif-TextControl" p:size="20" p:maxLength="20"/>
                                 </property>
                             </bean>
                             <!--  <bean parent="OlePatron-InputField" p:propertyName="entityId" p:readOnly="true">
@@ -700,8 +700,7 @@
                                     </list>
                                 </property>
                             </bean>
-
-                            <bean id="statisticalCategory" parent="OlePatron-InputField" p:propertyName="statisticalCategory" p:label="Statistical Category" p:enableAutoDirectInquiry="false">
+                            <!--<bean id="statisticalCategory" parent="OlePatron-InputField" p:propertyName="statisticalCategory" p:label="Statistical Category" p:enableAutoDirectInquiry="false">
                                 <property name="optionsFinder">
                                     <bean class="org.kuali.ole.deliver.keyvalue.OleStatisticalCategoryKeyValue" />
                                 </property>
@@ -709,10 +708,10 @@
                                     <bean parent="Uif-DropdownControl" p:cssClasses="fixed-size-200-select"/>
                                 </property>
                                 <property name="enableAutoQuickfinder" value="false" />
-                                <!--  <property name="quickfinder">
+                                &lt;!&ndash;  <property name="quickfinder">
                                       <null></null>
-                                  </property>-->
-                            </bean>
+                                  </property>&ndash;&gt;
+                            </bean>-->
                             <bean id="activationDate"  parent="OlePatron-InputField" p:propertyName="activationDate" p:required="true" p:label="Activation Date" >
                                 <property name="control">
                                     <bean parent="Uif-DateControl" p:size="10"/>
@@ -731,7 +730,7 @@
 
                                 </property>
                             </bean>
-                            <bean id="expirationDate" parent="OlePatron-InputField" p:propertyName="expirationDate" p:label="Expiration Date">
+                            <bean id="expirationDate" parent="OlePatron-InputField" p:propertyName="expirationDate" p:required="true" p:label="Expiration Date">
                                 <property name="control">
                                     <bean parent="Uif-DateControl" p:size="10"/>
                                 </property>
@@ -763,7 +762,7 @@
                         <list>
                             <bean parent="OlePatron-InputField" p:propertyName="olePatronId" p:readOnly="true">
                                 <property name="control">
-                                    <bean parent="Uif-TextControl" p:size="10" p:maxLength="10"/>
+                                    <bean parent="Uif-TextControl" p:size="20" p:maxLength="20"/>
                                 </property>
                             </bean>
                             <bean id="barcode_edit" parent="OlePatron-InputField" p:propertyName="barcode" p:label="Barcode" p:required="true">
@@ -811,7 +810,7 @@
                             <bean id="patronImage_edit" parent="Uif-ImageField" p:altText=""
                                   p:captionHeaderText="" p:cutlineText="" p:style="max-width:100px" p:source="patronMaintenance?methodToCall=getImage&amp;olePatronId=@{document.newMaintainableObject.dataObject.olePatronId}&amp;deleteImageFlag=@{document.newMaintainableObject.dataObject.deleteImageFlag}&amp;timeFlag=@{T(System).currentTimeMillis()}"  p:rowSpan="2" p:fieldLabel.rowSpan="2" p:label="Patron Photograph"/>
 
-                            <bean id="statisticalCategory_edit" parent="OlePatron-InputField" p:propertyName="statisticalCategory" p:label="Statistical Category" p:enableAutoDirectInquiry="false">
+                            <!--<bean id="statisticalCategory_edit" parent="OlePatron-InputField" p:propertyName="statisticalCategory" p:label="Statistical Category" p:enableAutoDirectInquiry="false">
                                 <property name="optionsFinder">
                                     <bean class="org.kuali.ole.deliver.keyvalue.OleStatisticalCategoryKeyValue" />
                                 </property>
@@ -819,7 +818,7 @@
                                     <bean parent="Uif-DropdownControl" p:cssClasses="fixed-size-200-select"/>
                                 </property>
                                 <property name="enableAutoQuickfinder" value="false" />
-                            </bean>
+                            </bean>-->
                             <bean id="activationDate_edit" p:id="OlePatronDocument-OverviewSection" parent="OlePatron-InputField" p:propertyName="activationDate" p:label="Activation Date" p:required="true" p:readOnly="false">
                                 <property name="control">
                                     <bean parent="Uif-DateControl" p:size="10"/>
@@ -1178,7 +1177,7 @@
         <property name="renderLineActions" value="@{document.newMaintainableObject.dataObject.expirationFlag}"/>-->
         <property name="items">
             <list>
-                <bean id="patronNoteTypeId" parent="OlePatron-InputField" p:propertyName="patronNoteTypeId" p:label="Note Type" p:required="true">
+                <bean id="patronNoteTypeId" parent="OlePatron-InputField" p:propertyName="patronNoteTypeId" p:label="Note Type" p:required="true" p:readOnly="@{!document.newMaintainableObject.dataObject.expirationFlag}">
                     <property name="optionsFinder">
                         <bean class="org.kuali.ole.deliver.keyvalue.OleNoteTypeKeyValues" />
                     </property>
@@ -1187,7 +1186,7 @@
                         <bean parent="Uif-DropdownControl" p:cssClasses="fixed-size-200-select"/>
                     </property>
                 </bean>
-                <bean id="patronNoteText" parent="OlePatron-InputField" p:propertyName="patronNoteText" p:label="Note Text">
+                <bean id="patronNoteText" parent="OlePatron-InputField" p:propertyName="patronNoteText" p:label="Note Text" p:readOnly="@{!document.newMaintainableObject.dataObject.expirationFlag}">
                     <property name="control">
                         <bean parent="Uif-LargeTextAreaControl" p:cssClasses="comments" p:watermarkText="size 800"/>
                     </property>
@@ -1217,22 +1216,9 @@
             <list>
                 <bean id="nameType" parent="OlePatron-InputField" p:propertyName="name.nameType.name" p:label="Name Type" p:readOnly="true">
                 </bean>
-                <bean id="namePrefix" parent="OlePatron-InputField" p:propertyName="name.namePrefix" p:label="Title">
-                    <property name="optionsFinder">
-                        <bean class="org.kuali.rice.kim.bo.options.NamePrefixValuesFinder" />
-                    </property>
-                    <property name="control">
-                        <bean parent="Uif-DropdownControl" p:cssClasses="fixed-size-50-select"/>
-                    </property>
-                </bean>
                 <bean id="firstName" parent="OlePatron-InputField" p:propertyName="name.firstName" p:label="First Name" p:required="true">
                     <property name="control">
                         <bean parent="Uif-TextControl" p:size="40" p:maxLength="40"  />
-                    </property>
-                </bean>
-                <bean id="middleName" parent="OlePatron-InputField" p:propertyName="name.middleName" p:label="Middle Name">
-                    <property name="control">
-                        <bean parent="Uif-TextControl" p:size="20" p:maxLength="20" />
                     </property>
                 </bean>
                 <bean id="lastName" parent="OlePatron-InputField" p:propertyName="name.lastName" p:label="Last Name" p:required="true">
@@ -1240,13 +1226,39 @@
                         <bean parent="Uif-TextControl" p:size="40" p:maxLength="40"/>
                     </property>
                 </bean>
-                <bean id="nameSuffix" parent="OlePatron-InputField" p:propertyName="name.nameSuffix" p:label="Suffix">
+                <bean id="middleName" parent="OlePatron-InputField" p:propertyName="name.middleName" p:label="Student ID">
+                    <property name="control">
+                        <bean parent="Uif-TextControl" p:size="20" p:maxLength="20" />
+                    </property>
+                </bean>
+
+                <bean id="namePrefix" parent="OlePatron-InputField" p:propertyName="name.namePrefix" p:label="PCODE1">
                     <property name="optionsFinder">
-                        <bean class="org.kuali.rice.kim.bo.options.NameSuffixValuesFinder" />
+                        <bean class="org.kuali.ole.deliver.keyvalue.SOASPatronPrefixFinder" />
                     </property>
                     <property name="control">
-                        <bean parent="Uif-DropdownControl" p:cssClasses="fixed-size-50-select"/>
+                        <bean parent="Uif-DropdownControl" p:cssClasses="fixed-size-200-select"/>
                     </property>
+                </bean>
+                <bean id="nameSuffix" parent="OlePatron-InputField" p:propertyName="name.nameSuffix" p:label="PCODE2">
+                    <property name="optionsFinder">
+                        <bean class="org.kuali.ole.deliver.keyvalue.SOASPatronSuffixFinder" />
+                    </property>
+                    <property name="control">
+                        <bean parent="Uif-DropdownControl" p:cssClasses="fixed-size-200-select"/>
+                    </property>
+                </bean>
+                <bean id="statisticalCategory" parent="OlePatron-InputField" p:propertyName="statisticalCategory" p:label="PCODE3" p:enableAutoDirectInquiry="false">
+                    <property name="optionsFinder">
+                        <bean class="org.kuali.ole.deliver.keyvalue.OleStatisticalCategoryKeyValue" />
+                    </property>
+                    <property name="control">
+                        <bean parent="Uif-DropdownControl" p:cssClasses="fixed-size-200-select"/>
+                    </property>
+                    <property name="enableAutoQuickfinder" value="false" />
+                    <!--  <property name="quickfinder">
+                          <null></null>
+                      </property>-->
                 </bean>
             </list>
         </property>
@@ -1332,7 +1344,7 @@
                 </bean>
 
                 <bean id="addressSource" parent="OlePatron-InputField" p:propertyName="oleAddressBo.addressSource"
-                      p:label="Address Source" p:required="true" p:enableAutoDirectInquiry="false">
+                      p:label="Address Source" p:required="true" p:enableAutoDirectInquiry="false" p:defaultValue="3">
                     <property name="optionsFinder">
                         <bean class="org.kuali.ole.deliver.keyvalue.OleAddressSourceKeyValue"/>
                     </property>
@@ -1345,7 +1357,7 @@
                     </property>
                 </bean>
                 <bean id="addressValidFrom" parent="OlePatron-InputField"
-                      p:propertyName="oleAddressBo.addressValidFrom" p:label="Begin Date">
+                      p:propertyName="oleAddressBo.addressValidFrom" p:label="Valid From">
                     <property name="control">
                         <bean parent="Uif-DateControl" p:size="15"/>
                     </property>
@@ -1363,7 +1375,7 @@
                     </property>
                 </bean>
                 <bean id="addressValidTo" parent="OlePatron-InputField"
-                      p:propertyName="oleAddressBo.addressValidTo" p:label="End Date">
+                      p:propertyName="oleAddressBo.addressValidTo" p:label="Valid To">
                     <property name="control">
                         <bean parent="Uif-DateControl" p:size="15"/>
                     </property>
@@ -1433,7 +1445,7 @@
                     </property>
                 </bean>
                 <bean id="olePhoneNumberSource" parent="OlePatron-InputField" p:propertyName="olePhoneBo.phoneSource"
-                      p:label="Phone Number Source" p:enableAutoDirectInquiry="false">
+                      p:label="Phone Number Source" p:required="true" p:enableAutoDirectInquiry="false" p:defaultValue="3">
                     <property name="optionsFinder">
                         <bean class="org.kuali.ole.deliver.keyvalue.OleAddressSourceKeyValue"/>
                     </property>
@@ -1509,7 +1521,7 @@
                     </property>
                 </bean>
                 <bean id="oleEmailAddressSource" parent="OlePatron-InputField" p:propertyName="oleEmailBo.emailSource"
-                      p:label="Email Address Source" p:enableAutoDirectInquiry="false">
+                      p:label="Email Address Source" p:required="true" p:enableAutoDirectInquiry="false" p:defaultValue="3">
                     <property name="optionsFinder">
                         <bean class="org.kuali.ole.deliver.keyvalue.OleAddressSourceKeyValue"/>
                     </property>

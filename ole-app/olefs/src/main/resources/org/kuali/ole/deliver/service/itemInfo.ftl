@@ -105,14 +105,14 @@
         </TR>
     </#if>
 
-  <TR>
+  <#--<TR>
       <TD>${oleNoticeContentConfigurationBo.getFieldLabel("Library Shelving location")} :</TD>
       <#if oleNoticeBo.itemShelvingLocation ??>
           <TD>${oleNoticeBo.itemShelvingLocation}</TD>
       <#else>
           <TD</TD>
       </#if>
-  </TR>
+  </TR>-->
     <#if oleNoticeBo.noticeTitle == "Return With Missing Item Notice">
         <TR>
             <TD>${oleNoticeContentConfigurationBo.getFieldLabel("Check In Date")} :</TD>

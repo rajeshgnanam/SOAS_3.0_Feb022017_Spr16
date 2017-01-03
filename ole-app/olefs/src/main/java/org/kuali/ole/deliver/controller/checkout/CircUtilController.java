@@ -4,6 +4,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.ole.OLEConstants;
+import org.kuali.ole.OLEParameterConstants;
 import org.kuali.ole.deliver.OleLoanDocumentsFromSolrBuilder;
 import org.kuali.ole.deliver.PatronBillGenerator;
 import org.kuali.ole.deliver.bo.*;
@@ -509,17 +510,50 @@ public class CircUtilController extends RuleExecutor {
         return noticeProcessors;
     }
 
+    private OlePaymentStatus getPaymentStatus(String paymentStatus) {
+        LOG.debug("Inside the getPaymentStatus method");
+        Map statusMap = new HashMap();
+        statusMap.put("paymentStatusCode", paymentStatus);
+        List<OlePaymentStatus> olePaymentStatusList = (List<OlePaymentStatus>) getBusinessObjectService().findMatching(OlePaymentStatus.class, statusMap);
+        return olePaymentStatusList != null && olePaymentStatusList.size() > 0 ? olePaymentStatusList.get(0) : null;
+    }
+
     public String generateBillPayment(String selectedCirculationDesk, OleLoanDocument loanDocument, Timestamp customDueDateMap, Timestamp dueDate) {
         String billPayment = null;
+        OlePaymentStatus forgivePaymentStatus = getPaymentStatus(OLEConstants.FORGIVEN);
         ItemFineRate itemFineRate = loanDocument.getItemFineRate();
-        if (null == itemFineRate.getFineRate() || null == itemFineRate.getMaxFine() || null == itemFineRate.getInterval()) {
+        List<FeeType> olePatronFeeTypes=loanDocument.getOlePatron().getPatronFeeTypes();
+        for(FeeType olePatronfeeType : olePatronFeeTypes){
+            if(olePatronfeeType.getFeeType().equals("2") && loanDocument.getItemId().equals(olePatronfeeType.getItemBarcode())) {
+                if(olePatronfeeType.getPaymentStatusCode().equalsIgnoreCase("PAY_OUTSTN")) {
+                    OleItemLevelBillPayment oleItemLevelBillPayment = new OleItemLevelBillPayment();
+                    oleItemLevelBillPayment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
+                    oleItemLevelBillPayment.setAmount(olePatronfeeType.getBalFeeAmount());
+                    oleItemLevelBillPayment.setCreatedUser(loanDocument.getLoanOperatorId());
+                    oleItemLevelBillPayment.setPaymentMode(OLEConstants.FORGIVE);
+                    oleItemLevelBillPayment.setNote("Note" + loanDocument.getCheckInDate());
+                    List<OleItemLevelBillPayment> oleItemLevelBillPayments = CollectionUtils.isNotEmpty(olePatronfeeType.getItemLevelBillPaymentList()) ? olePatronfeeType.getItemLevelBillPaymentList() : new ArrayList<OleItemLevelBillPayment>();
+                    oleItemLevelBillPayments.add(oleItemLevelBillPayment);
+                    olePatronfeeType.setItemLevelBillPaymentList(oleItemLevelBillPayments);
+                    olePatronfeeType.setPaymentStatus(forgivePaymentStatus.getPaymentStatusId());
+                    olePatronfeeType.setBalFeeAmount(new KualiDecimal(0));
+                    getBusinessObjectService().save(olePatronfeeType);
+                    /*String adminServiceFeeParameter = getParameterResolverInstance().getParameter(OLEConstants.APPL_ID_OLE, OLEConstants.DLVR_NMSPC, OLEConstants.DLVR_CMPNT, OLEParameterConstants.ADMIN_SER_FEE);
+                    if (StringUtils.isNotBlank(adminServiceFeeParameter)) {
+                        Double adminSerFee = Double.valueOf(adminServiceFeeParameter);
+                        generateServiceBill(loanDocument, adminSerFee, dueDate);
+                    }*/
+                }
+            }
+        }
+        if (null == itemFineRate.getFineRate() || null == itemFineRate.getInterval()) {
             LOG.error("No fine rule found");
         } else {
             if (null != loanDocument.getReplacementBill() && loanDocument.getReplacementBill().compareTo(BigDecimal.ZERO) > 0) {
                 billPayment = generateReplacementBill(loanDocument, dueDate);
             } else {
                 Double overdueFine = new FineDateTimeUtil().calculateOverdueFine(selectedCirculationDesk, dueDate, customDueDateMap, itemFineRate);
-                overdueFine = overdueFine >= itemFineRate.getMaxFine() ? itemFineRate.getMaxFine() : overdueFine;
+                //overdueFine = overdueFine >= itemFineRate.getMaxFine() ? itemFineRate.getMaxFine() : overdueFine;
                 if (null != overdueFine && overdueFine > 0) {
                     billPayment = generateOverdueBill(loanDocument, overdueFine, dueDate);
                 }

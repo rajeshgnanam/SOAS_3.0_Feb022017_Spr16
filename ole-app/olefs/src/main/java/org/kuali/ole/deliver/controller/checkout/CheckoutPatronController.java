@@ -115,7 +115,8 @@ public class CheckoutPatronController extends CheckoutItemController {
             DroolsResponse droolsResponse = getPatronLookupCircUIController().processPatronValidation(droolsExchange);
             if (null != droolsResponse && StringUtils.isNotBlank(droolsResponse.retrieveErrorMessage())) {
                 circForm.setErrorMessage(droolsResponse.getErrorMessage());
-                showErrorMessageDialog(circForm, request, response);
+               // showErrorMessageDialog(circForm, request, response);
+                showDialog("ptrnValidationErrorMessageDialog", circForm, request, response);
             } else {
                 postPatronValidation(circForm, result, request, response);
             }

@@ -68,6 +68,10 @@ public class CheckoutItemController extends CircFastAddItemController {
             }else if (null != droolsResponse.retriveErrorCode() && droolsResponse.retriveErrorCode().equals(DroolsConstants.CHECKED_OUT_BY_SAME_PATRON)) {
                 circForm.setErrorMessage(droolsResponse.getErrorMessage());
                 showDialog("checkoutRenewOptionDialog", circForm, request, response);
+            }else if (null != droolsResponse.retriveErrorCode() && droolsResponse.retriveErrorCode().equals(DroolsConstants.LOANED_BY_SAME_PATRON_LOST)) {
+                circForm.setErrorMessage(droolsResponse.getErrorMessage());
+                resetItemInfoForNextTrans(circForm);
+                showDialog("generalInfoDialog", circForm, request, response);
             }else if (null != droolsResponse.retriveErrorCode() && droolsResponse.retriveErrorCode().equals(DroolsConstants.LOANED_BY_DIFFERENT_PATRON)) {
                 circForm.setErrorMessage(droolsResponse.getErrorMessage());
                 showDialog("itemAlreadyLoaned", circForm, request, response);
@@ -124,7 +128,7 @@ public class CheckoutItemController extends CircFastAddItemController {
                 showDialog("itemAlreadyLoaned", circForm, request, response);
             }else if (null != droolsResponse.retriveErrorCode() && droolsResponse.retriveErrorCode().equals(DroolsConstants.CHECKED_OUT_BY_SAME_PATRON)) {
                 circForm.setErrorMessage(droolsResponse.getErrorMessage());
-                showDialog("checkoutRenewOptionDialog", circForm, request, response);
+                showDialog("generalInfoDialog", circForm, request, response);
             }else if (null != droolsResponse.retriveErrorCode() && droolsResponse.retriveErrorCode().equals(DroolsConstants.LOANED_BY_DIFFERENT_PATRON)) {
                 circForm.setErrorMessage(droolsResponse.getErrorMessage());
                 showDialog("itemAlreadyLoaned", circForm, request, response);
@@ -173,7 +177,7 @@ public class CheckoutItemController extends CircFastAddItemController {
                 showDialog("itemAlreadyLoaned", circForm, request, response);
             }else if (null != droolsResponse.retriveErrorCode() && droolsResponse.retriveErrorCode().equals(DroolsConstants.CHECKED_OUT_BY_SAME_PATRON)) {
                 circForm.setErrorMessage(droolsResponse.getErrorMessage());
-                showDialog("checkoutRenewOptionDialog", circForm, request, response);
+                showDialog("generalInfoDialog", circForm, request, response);
             }else if (null != droolsResponse.retriveErrorCode() && droolsResponse.retriveErrorCode().equals(DroolsConstants.LOANED_BY_DIFFERENT_PATRON)) {
                 circForm.setErrorMessage(droolsResponse.getErrorMessage());
                 showDialog("itemAlreadyLoaned", circForm, request, response);
@@ -220,7 +224,7 @@ public class CheckoutItemController extends CircFastAddItemController {
                 showDialog("itemAlreadyLoaned", circForm, request, response);
             }else if (null != droolsResponse.retriveErrorCode() && droolsResponse.retriveErrorCode().equals(DroolsConstants.CHECKED_OUT_BY_SAME_PATRON)) {
                 circForm.setErrorMessage(droolsResponse.getErrorMessage());
-                showDialog("checkoutRenewOptionDialog", circForm, request, response);
+                showDialog("generalInfoDialog", circForm, request, response);
             }else if (null != droolsResponse.retriveErrorCode() && droolsResponse.retriveErrorCode().equals(DroolsConstants.LOANED_BY_DIFFERENT_PATRON)) {
                 circForm.setErrorMessage(droolsResponse.getErrorMessage());
                 showDialog("itemAlreadyLoaned", circForm, request, response);

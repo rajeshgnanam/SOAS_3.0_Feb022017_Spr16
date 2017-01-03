@@ -77,7 +77,8 @@ var dataMappingObject = {
         {id: 'chronology', name: 'Chronology'},
         {id: 'vendorLineItemId', name: 'Vendor Line Item Identifier'},
         {id: 'staffOnly', name: 'Staff Only'},
-        {id: 'numberOfPieces', name: 'Number of Pieces'}
+        {id: 'numberOfPieces', name: 'Number of Pieces'},
+        {id: 'publicNote', name: 'Public Note'}
     ],
     destinationFieldsForBibMarcEHoldings :  [
         {id: 'Local Identifier', name: 'Local Identifier'},

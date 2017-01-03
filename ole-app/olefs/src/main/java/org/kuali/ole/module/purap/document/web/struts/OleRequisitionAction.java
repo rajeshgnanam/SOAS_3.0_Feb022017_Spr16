@@ -789,7 +789,7 @@ public class OleRequisitionAction extends RequisitionAction {
             itemCopy.setVolumeNumber(item.getVolumeNumber());
             item.setOleRequisitionCopy(itemCopy);
             List<OleCopy> copyList = oleCopyHelperService.setCopyValues(item.getOleRequisitionCopy(), item.getItemTitleId(), volChar);
-            item.getCopyList().addAll(copyList);
+            item.setCopyList(copyList);
             item.getCopies().add(itemCopy);
             item.setParts(null);
             item.setItemCopies(null);
@@ -1095,7 +1095,7 @@ public class OleRequisitionAction extends RequisitionAction {
         if (sufficientFundChecklag) {
             super.blanketApprove(mapping, form, request, response);
         }
-        return mapping.findForward(OLEConstants.MAPPING_BASIC);
+        return mapping.findForward(OLEConstants.MAPPING_CLOSE);
     }
 
     public ActionForward selectVendor(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
