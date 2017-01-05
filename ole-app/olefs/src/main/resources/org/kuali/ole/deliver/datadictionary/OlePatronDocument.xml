@@ -521,7 +521,7 @@
                             <bean id="overviewSection_activationDate" parent="Uif-InputField" p:propertyName="activationDate" p:label="Activation Date"/>
                             <bean id="overviewSection_expirationDate" parent="Uif-InputField" p:propertyName="expirationDate" p:label="Expiration Date"/>
                             <bean id="overviewSection_source" parent="Uif-InputField" p:propertyName="oleSourceName" p:label="Source"/>
-                            <bean id="overviewSection_statisticalCategory" parent="Uif-InputField" p:propertyName="oleStatisticalCategoryName" p:label="Statistical Category"/>
+                            <!--<bean id="overviewSection_statisticalCategory" parent="Uif-InputField" p:propertyName="oleStatisticalCategoryName" p:label="Statistical Category"/>-->
                             <bean id="overviewSection_activeIndicator" parent="Uif-InputField" p:propertyName="activeIndicator" p:label="Active"/>
 
                         </list>
