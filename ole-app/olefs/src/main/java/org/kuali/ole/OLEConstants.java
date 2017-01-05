@@ -3486,9 +3486,6 @@ public class OLEConstants {
     public static final String HOLD_REQUEST_EXPIRED = "message.request.hold.expired";
 
 
-    public static final String LOST_NOTICE_CONTENT="LOST_NOTICE_CONTENT";
-
-
     public static String getParameter(String name) {
         ParameterKey parameterKey = ParameterKey.create(OLEConstants.APPL_ID, OLEConstants.DLVR_NMSPC, OLEConstants.DLVR_CMPNT,name);
         Parameter parameter = CoreServiceApiServiceLocator.getParameterRepositoryService().getParameter(parameterKey);
