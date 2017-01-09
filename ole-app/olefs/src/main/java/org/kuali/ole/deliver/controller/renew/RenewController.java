@@ -176,9 +176,13 @@ public class RenewController extends CircUtilController {
             for (Iterator<String> iterator = context.keySet().iterator(); iterator.hasNext(); ) {
                 String key = iterator.next();
                 DroolsResponse individualDroolResponse = (DroolsResponse) context.get(key);
-                if (StringUtils.isNotBlank(individualDroolResponse.getSucessMessage()) && individualDroolResponse.getSucessMessage().contains("Successfully Renewed")) {
+                if (StringUtils.isNotBlank(individualDroolResponse.getSucessMessage()) && individualDroolResponse.getSucessMessage().equalsIgnoreCase("Successfully Renewed")) {
                     OleLoanDocument oleLoanDocument = (OleLoanDocument) individualDroolResponse.getDroolsExchange().getContext().get(key);
                     String content = "Successfully renewed for item (" + oleLoanDocument.getItemId() + ")";
+                    appendContentToStrinBuilder(messageContentForRenew, content);
+                }else if (StringUtils.isNotBlank(individualDroolResponse.getSucessMessage()) && individualDroolResponse.getSucessMessage().equalsIgnoreCase("Successfully Renewed. Overdue fine exists")) {
+                    OleLoanDocument oleLoanDocument = (OleLoanDocument) individualDroolResponse.getDroolsExchange().getContext().get(key);
+                    String content = "Successfully renewed for item (" + oleLoanDocument.getItemId() + "). Overdue fine exists";
                     appendContentToStrinBuilder(messageContentForRenew, content);
                 } else if (individualDroolResponse.retriveErrorCode().equalsIgnoreCase("No renewal policy found")) {
                     Map<String, Object> individualResponseMap = individualDroolResponse.getDroolsExchange().getContext();

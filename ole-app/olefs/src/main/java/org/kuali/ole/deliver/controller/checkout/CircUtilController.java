@@ -538,6 +538,7 @@ public class CircUtilController extends RuleExecutor {
                     olePatronfeeType.setPaymentStatus(forgivePaymentStatus.getPaymentStatusId());
                     olePatronfeeType.setBalFeeAmount(new KualiDecimal(0));
                     getBusinessObjectService().save(olePatronfeeType);
+                    loanDocument.setReplacementBill(null);
                     /*String adminServiceFeeParameter = getParameterResolverInstance().getParameter(OLEConstants.APPL_ID_OLE, OLEConstants.DLVR_NMSPC, OLEConstants.DLVR_CMPNT, OLEParameterConstants.ADMIN_SER_FEE);
                     if (StringUtils.isNotBlank(adminServiceFeeParameter)) {
                         Double adminSerFee = Double.valueOf(adminServiceFeeParameter);
