@@ -541,6 +541,9 @@ public class BrowseServiceImpl implements BrowseService {
         } else {
             if (StringUtils.isNotEmpty(classificationScheme)) {
                 String callNumberBrowseText = callNumberBrowseParams.getCallNumberBrowseText();
+                if(callNumberBrowseText.contains(".")){
+                    callNumberBrowseText.replace(".","");
+                }
                 BrowseParams browseParamsForTotalCallNumber = totalBrowseParams(callNumberBrowseParams);
                 if (callNumberBrowseParams.getDocTye().equalsIgnoreCase(DocType.ITEM.getCode())) {
                     searchResponse = getDocstoreClient().browseItems(browseParamsForTotalCallNumber);
@@ -807,10 +810,14 @@ public class BrowseServiceImpl implements BrowseService {
             callNumberBrowseParams.setTitle(oleSearchForm.getBrowseText());
         }
         else {
+            buildSchemaOrder(callNumberBrowseParams);
             callNumberBrowseParams.setClassificationScheme(oleSearchForm.getClassificationScheme());
             callNumberBrowseParams.setLocation(oleSearchForm.getLocation());
-            callNumberBrowseParams.setCallNumberBrowseText(oleSearchForm.getCallNumberBrowseText());
-            buildSchemaOrder(callNumberBrowseParams);
+            if(oleSearchForm.getCallNumberBrowseText().contains(".")){
+                callNumberBrowseParams.setCallNumberBrowseText(oleSearchForm.getCallNumberBrowseText().replace(".",""));
+            }else{
+                callNumberBrowseParams.setCallNumberBrowseText(oleSearchForm.getCallNumberBrowseText());
+            }
         }
         callNumberBrowseParams.setNumRows(oleSearchForm.getPageSize());
         callNumberBrowseParams.setDocTye(oleSearchForm.getDocType());
