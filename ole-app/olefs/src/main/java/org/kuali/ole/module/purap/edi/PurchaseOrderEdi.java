@@ -544,8 +544,11 @@ public class PurchaseOrderEdi {
                 char[] digitCheck = isbn.toCharArray();
                 for(int ch =0; ch<digitCheck.length;ch++){
                     if(!Character.isDigit(digitCheck[ch])){
-                        isbn = isbn.substring(0,ch);
-                        break;
+                        if(digitCheck[ch]=='x'||digitCheck[ch]=='X'){
+                        }else{
+                            isbn = isbn.substring(0,ch);
+                            break;
+                        }
                     }
                 }
             }
