@@ -78,7 +78,10 @@ public class ExportDao extends PlatformAwareDaoBaseJdbc {
             }
             List<BatchProfileFilterCriteria> filterCriteriaList = batchProcessTxObject.getBatchProcessProfile().getBatchProfileFilterCriteriaList();
             if (CollectionUtils.isNotEmpty(filterCriteriaList)) {
-                if (!filterCriteriaList.get(0).getFieldName().equalsIgnoreCase("Bib Local Id From File")) {
+                if (filterCriteriaList.get(0).getFieldName()!=null && !filterCriteriaList.get(0).getFieldName().equalsIgnoreCase("Bib Local Id From File")) {
+                    batchProcessTxObject.getBatchJobDetails().setTotalRecords(String.valueOf(totalCount));
+                    oleNGBatchExportResponse.setTotalNumberOfRecords((int) totalCount);
+                }else{
                     batchProcessTxObject.getBatchJobDetails().setTotalRecords(String.valueOf(totalCount));
                     oleNGBatchExportResponse.setTotalNumberOfRecords((int) totalCount);
                 }
