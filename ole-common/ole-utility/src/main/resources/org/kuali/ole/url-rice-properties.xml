@@ -4,7 +4,7 @@
 
 <config>
     <!-- Default URL's for local development -->
-    <param name="ole.url.base">http://localhost:8080</param>
+    <param name="ole.url.base">http://192.168.55.137:9090</param>
     <param name="ole.docstore.url.base">${ole.url.base}/oledocstore</param>
     <param name="ole.fs.url.base">${ole.url.base}/olefs</param>
     <param name="ole.reports.url.base">${ole.url.base}/olereports</param>
