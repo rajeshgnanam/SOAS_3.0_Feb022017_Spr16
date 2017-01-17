@@ -97,25 +97,22 @@ public class RenewItemExecutor implements Callable {
                                 List<OLEDeliverNotice> oleDeliverNotices = getCircUtilController().processNotices(oleLoanDocument, oleItemRecordForCirc.getItemRecord(), null);
                                         oleLoanDocument.setDeliverNotices(oleDeliverNotices);
                                         if (null != oleLoanDocument.getLoanId()) {
-                                            finalDroolResponse.setSucessMessage("Successfully Renewed");
+                                            String billNumber = getCircUtilController().generateBillPayment(oleLoanDocument.getCirculationLocationId(), oleLoanDocument, new Timestamp(new Date().getTime()), new Timestamp(oleLoanDocument.getPastDueDate().getTime()));
+                                            if(StringUtils.isNotEmpty(billNumber)){
+                                                finalDroolResponse.setSucessMessage("Successfully Renewed. Overdue fine exists");
+                                            }else{
+                                                finalDroolResponse.setSucessMessage("Successfully Renewed");
+                                            }
                                             finalDroolResponse.getDroolsExchange().addToContext(oleLoanDocument.getItemUuid(), oleLoanDocument);
-
-                                            getCircUtilController().generateBillPayment(oleLoanDocument.getCirculationLocationId(), oleLoanDocument, new Timestamp(new Date().getTime()), new Timestamp(oleLoanDocument.getPastDueDate().getTime()));
-
                                         }
                                     } else {
                                         oleLoanDocument.setLoanDueDate(loanDueDate);
                                         oleLoanDocument.setPastDueDate(pastDueDate);
                                         oleLoanDocument.setErrorMessage("The past and the current due data are same and hence item wasn't renewed.");
                                         finalDroolResponse.getDroolsExchange().addToContext(itemBarcode, oleLoanDocument);
-                                    String billNumber = getCircUtilController().generateBillPayment(oleLoanDocument.getCirculationLocationId(), oleLoanDocument, new Timestamp(new Date().getTime()), new Timestamp(oleLoanDocument.getPastDueDate().getTime()));
-                                    if(StringUtils.isNotEmpty(billNumber)){
-                                        finalDroolResponse.setSucessMessage("Successfully Renewed. Overdue fine exists");
-                                    }else{
-                                        finalDroolResponse.setSucessMessage("Successfully Renewed");
                                     }
-                                }
-                                } catch (Exception e) {
+
+                                }catch (Exception e) {
                                     oleLoanDocument.setLoanDueDate(loanDueDate);
                                     oleLoanDocument.setPastDueDate(pastDueDate);
                                     if (e.getMessage().equalsIgnoreCase("No Fixed Due Date found for the renewal policy")) {
