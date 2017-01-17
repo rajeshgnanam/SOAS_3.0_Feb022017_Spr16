@@ -186,7 +186,11 @@ public abstract class RequestNoticesExecutor extends NoticesExecutor {
         parameterMap.put("noticeContent", noticeContent);
         String patronId = (new CircUtilController().getItemRecordByBarcode(oleDeliverRequestBos.get(0).getItemId())).getCurrentBorrower();
         Map<String, String> parameterMap1 = new HashMap<>();
-        parameterMap1.put("olePatronId", patronId);
+        if(patronId!=null){
+            parameterMap1.put("olePatronId", patronId);
+        }else{
+            parameterMap1.put("olePatronId", oleDeliverRequestBos.get(0).getBorrowerId());
+        }
         OlePatronDocument olePatron = KRADServiceLocator.getBusinessObjectService().findByPrimaryKey(OlePatronDocument.class, parameterMap1);
         String patronBarcode = "";
         if(olePatron!=null){
