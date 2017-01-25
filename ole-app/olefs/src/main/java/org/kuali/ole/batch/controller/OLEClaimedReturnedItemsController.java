@@ -23,6 +23,7 @@ import org.kuali.ole.docstore.common.document.Item;
 import org.kuali.ole.docstore.common.document.content.enums.DocType;
 import org.kuali.ole.docstore.common.search.*;
 import org.kuali.ole.sys.context.SpringContext;
+import org.kuali.rice.core.api.util.RiceConstants;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.service.KRADServiceLocator;
 import org.kuali.rice.krad.util.GlobalVariables;
@@ -333,7 +334,7 @@ public class OLEClaimedReturnedItemsController extends UifControllerBase {
         return searchResultFields;
     }
 
-    private List<OLEClaimedReturnedItemResult> buildClaimedReturnedItemResults(SearchResponse searchResponse, List<String> locations) {
+    private List<OLEClaimedReturnedItemResult> buildClaimedReturnedItemResults(SearchResponse searchResponse, List<String> locations) throws ParseException {
         List<OLEClaimedReturnedItemResult> claimedReturnedItemResults = new ArrayList<>();
         Set<String> itemIds = new HashSet<>();
         if (searchResponse != null) {
@@ -378,6 +379,10 @@ public class OLEClaimedReturnedItemsController extends UifControllerBase {
                         } else if (searchResultField.getFieldName().equalsIgnoreCase(Item.CHRONOLOGY)) {
                             claimedReturnedItemResult.setChronology(searchResultField.getFieldValue());
                         } else if (searchResultField.getFieldName().equalsIgnoreCase(DocstoreConstants.CLMS_RET_FLAG_CRE_DATE)) {
+                            if(StringUtils.isNotBlank(searchResultField.getFieldValue())){
+                                 Date claimsDate=new SimpleDateFormat(OLEConstants.DAT_FORMAT_EFFECTIVE_NOTICE).parse(searchResultField.getFieldValue());
+                                 searchResultField.setFieldValue(new SimpleDateFormat(RiceConstants.SIMPLE_DATE_FORMAT_FOR_DATE+OLEConstants.DATE_FORMAT_FOR_TIME_SEC).format(claimsDate));
+                            }
                             claimedReturnedItemResult.setDateOfClaim(searchResultField.getFieldValue());
                         } else if (searchResultField.getFieldName().equalsIgnoreCase(DocstoreConstants.CLMS_RET_NOTE)) {
                             claimedReturnedItemResult.setClaimReturnNote(searchResultField.getFieldValue());
