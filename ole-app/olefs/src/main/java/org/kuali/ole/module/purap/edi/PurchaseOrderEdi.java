@@ -571,15 +571,15 @@ public class PurchaseOrderEdi {
                     lineCount++;
                 }
                 if (oleBatchProcessProfileConstantsBo.getAttributeName().equalsIgnoreCase(OLEConstants.ITM_AUT)) {
-                    ediItemValues.put(OLEConstants.ITM_AUT, oleBatchProcessProfileConstantsBo.getAttributeValue().replace(OLEConstants.EDIBatchProfile.SYMBOL_ASTERISK, purchaseOrderItem.getDocData().getAuthor()));
+                    ediItemValues.put(OLEConstants.ITM_AUT, oleBatchProcessProfileConstantsBo.getAttributeValue().replace(OLEConstants.EDIBatchProfile.SYMBOL_ASTERISK, purchaseOrderItem.getDocData().getAuthor()!=null ? purchaseOrderItem.getDocData().getAuthor().replace("'","?'") : purchaseOrderItem.getDocData().getAuthor()));
                     lineCount++;
                 }
                 if (oleBatchProcessProfileConstantsBo.getAttributeName().equalsIgnoreCase(OLEConstants.ITM_TIT)) {
-                    ediItemValues.put(OLEConstants.ITM_TIT, oleBatchProcessProfileConstantsBo.getAttributeValue().replace(OLEConstants.EDIBatchProfile.SYMBOL_ASTERISK, purchaseOrderItem.getDocData().getTitle()));
+                    ediItemValues.put(OLEConstants.ITM_TIT, oleBatchProcessProfileConstantsBo.getAttributeValue().replace(OLEConstants.EDIBatchProfile.SYMBOL_ASTERISK, purchaseOrderItem.getDocData().getTitle()!=null ? purchaseOrderItem.getDocData().getTitle().replace("'","?'") : purchaseOrderItem.getDocData().getTitle()));
                     lineCount++;
                 }
                 if (oleBatchProcessProfileConstantsBo.getAttributeName().equalsIgnoreCase(OLEConstants.EDIBatchProfile.ITEM_PUBLISHER)) {
-                    ediItemValues.put(OLEConstants.EDIBatchProfile.ITEM_PUBLISHER, oleBatchProcessProfileConstantsBo.getAttributeValue().replace(OLEConstants.EDIBatchProfile.SYMBOL_ASTERISK, purchaseOrderItem.getDocData().getPublisher()));
+                    ediItemValues.put(OLEConstants.EDIBatchProfile.ITEM_PUBLISHER, oleBatchProcessProfileConstantsBo.getAttributeValue().replace(OLEConstants.EDIBatchProfile.SYMBOL_ASTERISK, purchaseOrderItem.getDocData().getPublisher()!=null ? purchaseOrderItem.getDocData().getPublisher().replace("'","?'") : purchaseOrderItem.getDocData().getPublisher()));
                     lineCount++;
                 }
                 if (oleBatchProcessProfileConstantsBo.getAttributeName().equalsIgnoreCase(OLEConstants.EDIBatchProfile.ITEM_PUBLISHER_DATE)) {
