@@ -1630,7 +1630,7 @@ public class OlePatronDocument extends PersistableBusinessObjectBase implements 
     }
 
     public int getRequestedItemRecordsCount() {
-        return requestedItemRecordsCount;
+        return getOleDeliverRequestBos().size();
     }
 
     public void setRequestedItemRecordsCount(int requestedItemRecordsCount) {
