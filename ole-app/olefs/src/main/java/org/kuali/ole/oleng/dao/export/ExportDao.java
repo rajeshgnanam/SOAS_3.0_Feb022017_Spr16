@@ -63,17 +63,27 @@ public class ExportDao extends PlatformAwareDaoBaseJdbc {
             int fileCount = 1;
             int fileSize = batchProcessTxObject.getBatchJobDetails().getNumOfRecordsInFile();
             int numOfRecordsInFile = 0;
-            SolrDocumentList solrDocumentList = batchExportHandler.getSolrRequestReponseHandler().getSolrDocumentList(
-                    query, null, null, OleNGConstants.BIB_IDENTIFIER);
-            totalCount = solrDocumentList.getNumFound();
-
             List<String> bibIds = new ArrayList<>();
 
+            if(batchProcessTxObject.getBatchProcessProfile().getExportScope().equalsIgnoreCase(OleNGConstants.INCREMENTAL_EXCEPT_STAFF_ONLY)){
+                bibIds=getBibIdFromSqlQuery(query,batchProcessTxObject.getBatchProcessProfile().getExportScope());
+                if(bibIds!=null){
+                    totalCount=bibIds.size();
+                }
+            }else{
+                SolrDocumentList solrDocumentList= batchExportHandler.getSolrRequestReponseHandler().getSolrDocumentList(
+                         query, null, null, OleNGConstants.BIB_IDENTIFIER);
+                totalCount = solrDocumentList.getNumFound();
+            }
+
+
             if(isIncremental) {
-                bibIds = getBibIds(query, totalCount, chunkSize, batchExportHandler, batchProcessTxObject);
-                totalCount = bibIds.size();
-                if(fileSize < chunkSize) {
-                    chunkSize = fileSize;
+                if(!batchProcessTxObject.getBatchProcessProfile().getExportScope().equalsIgnoreCase(OleNGConstants.INCREMENTAL_EXCEPT_STAFF_ONLY)){
+                    bibIds = getBibIds(query, totalCount, chunkSize, batchExportHandler, batchProcessTxObject);
+                    totalCount = bibIds.size();
+                    if (fileSize < chunkSize) {
+                        chunkSize = fileSize;
+                    }
                 }
             }
             List<BatchProfileFilterCriteria> filterCriteriaList = batchProcessTxObject.getBatchProcessProfile().getBatchProfileFilterCriteriaList();
@@ -254,5 +264,26 @@ public class ExportDao extends PlatformAwareDaoBaseJdbc {
         return maxNumberOfThread;
     }
 
+    private List<String> getBibIdFromSqlQuery(String query,String batchExportScope) throws SQLException {
+        List<String> bibIdList=new ArrayList<>();
+        Set<String> bibIdSet=new HashSet<>();
+        SqlRowSet bibIdResultSet=null;
+        if(batchExportScope.equalsIgnoreCase(OleNGConstants.INCREMENTAL_EXCEPT_STAFF_ONLY)){
+            String[] queryList=query.split("\\|");
+            for(int i=0;i<queryList.length;i++){
+                bibIdResultSet=getJdbcTemplate().queryForRowSet(queryList[i]);
+                while (bibIdResultSet.next()){
+                    bibIdSet.add(bibIdResultSet.getString(1));
+                }
+            }
+            bibIdList=new ArrayList<>(bibIdSet);
+        }else {
+            bibIdResultSet = getJdbcTemplate().queryForRowSet(query);
+            while (bibIdResultSet.next()) {
+                bibIdList.add(bibIdResultSet.getString(1));
+            }
+        }
+        return bibIdList;
+    }
 
 }
