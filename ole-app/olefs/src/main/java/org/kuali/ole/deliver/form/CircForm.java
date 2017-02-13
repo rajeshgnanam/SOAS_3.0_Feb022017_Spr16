@@ -39,6 +39,7 @@ public class CircForm extends OLEForm {
     private boolean itemValidationDone;
     private boolean itemOverride;
     private boolean requestExistOrLoanedCheck;
+    private String isRequestAvailable;
 
     /*
     patronBarcode: Current Borrower
@@ -615,5 +616,13 @@ public class CircForm extends OLEForm {
 
     public void setItemFoundInLibrary(boolean itemFoundInLibrary) {
         this.itemFoundInLibrary = itemFoundInLibrary;
+    }
+
+    public String getIsRequestAvailable() {
+        return isRequestAvailable;
+    }
+
+    public void setIsRequestAvailable(String isRequestAvailable) {
+        this.isRequestAvailable = isRequestAvailable;
     }
 }

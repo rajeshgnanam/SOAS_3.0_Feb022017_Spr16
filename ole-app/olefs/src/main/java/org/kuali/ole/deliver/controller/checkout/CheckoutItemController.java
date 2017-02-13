@@ -414,7 +414,7 @@ public class CheckoutItemController extends CircFastAddItemController {
         return getUIFModelAndView(circForm);
     }
 
-    public void createClaimsReturnForItem(CircForm circForm, List<OleLoanDocument> loanDocumentList, OlePatronDocument olePatronDocument) throws Exception {
+    public void createClaimsReturnForItem(CircForm circForm, List<OleLoanDocument> loanDocumentList, OlePatronDocument olePatronDocument,String canCancelRequest) throws Exception {
         if (CollectionUtils.isNotEmpty(loanDocumentList)) {
             for (Iterator<OleLoanDocument> iterator = loanDocumentList.iterator(); iterator.hasNext(); ) {
                 OleLoanDocument oleLoanDocument = iterator.next();
@@ -427,7 +427,9 @@ public class CheckoutItemController extends CircFastAddItemController {
                 parameterMap.put("patronId", olePatronDocument.getOlePatronId());
                 parameterMap.put("proxyPatronId", oleLoanDocument.getProxyPatronId());
                 getCheckoutUIController(circForm.getFormKey()).updateItemInfoInSolr(parameterMap, oleLoanDocument.getItemUuid(), false);
-                new OleDeliverRequestDocumentHelperServiceImpl().cancelPendingRequestForClaimsReturnedItem(oleLoanDocument.getItemUuid());
+                if(canCancelRequest!=null && canCancelRequest.equalsIgnoreCase("true")){
+                    new OleDeliverRequestDocumentHelperServiceImpl().cancelPendingRequestForClaimsReturnedItem(oleLoanDocument.getItemUuid());
+                }
             }
         }
     }
