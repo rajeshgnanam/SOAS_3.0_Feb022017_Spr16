@@ -303,7 +303,7 @@ public abstract class CheckinBaseController extends CircUtilController {
                 updateItemStatusAndCircCount(oleItemRecordForCirc);
                 emailToPatronForOnHoldStatus();
                 if (!(claimsReturnedFlag && isItemFoundInLibrary(oleForm))){
-                    billNumber = generateBillPayment(getSelectedCirculationDesk(oleForm), loanDocument, checkinDate, loanDocument.getLoanDueDate());
+                    billNumber = generateBillPayment(getSelectedCirculationDesk(oleForm), loanDocument, checkinDate, loanDocument.getLoanDueDate(),false);
                 }
                 if (claimsReturnedFlag && oleItemRecordForCirc.getItemStatusRecord() != null && OLEConstants.ITEM_STATUS_LOST.equalsIgnoreCase(oleItemRecordForCirc.getItemStatusRecord().getCode())) {
                     processClaimsReturnedAndLostItem(oleForm, loanDocument, checkinDate);

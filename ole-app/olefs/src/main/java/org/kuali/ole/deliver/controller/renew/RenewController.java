@@ -79,7 +79,7 @@ public class RenewController extends CircUtilController {
                                         if (null != itemForUpdate) {
                                             itemList.add(itemForUpdate);
 
-                                            String billNumber = generateBillPayment(oleLoanDocument.getCirculationLocationId(), oleLoanDocument, new Timestamp(new Date().getTime()), new Timestamp(oleLoanDocument.getPastDueDate().getTime()));
+                                            String billNumber = generateBillPayment(oleLoanDocument.getCirculationLocationId(), oleLoanDocument, new Timestamp(new Date().getTime()), new Timestamp(oleLoanDocument.getPastDueDate().getTime()),true);
                                             if (StringUtils.isNotEmpty(billNumber)) {
                                                 droolsResponse.setSucessMessage("Successfully Renewed. Overdue fine exists");
                                             } else {
@@ -273,7 +273,7 @@ public class RenewController extends CircUtilController {
                 DroolsResponse individualDroolResponse = (DroolsResponse) context.get(key);
                 if (StringUtils.isNotBlank(individualDroolResponse.getSucessMessage()) && individualDroolResponse.getSucessMessage().equalsIgnoreCase("Successfully Renewed")) {
                     OleLoanDocument oleLoanDocument = (OleLoanDocument) individualDroolResponse.getDroolsExchange().getContext().get(key);
-                    String billNumber = generateBillPayment(oleLoanDocument.getCirculationLocationId(), oleLoanDocument, new Timestamp(new Date().getTime()), new Timestamp(oleLoanDocument.getPastDueDate().getTime()));
+                    String billNumber = generateBillPayment(oleLoanDocument.getCirculationLocationId(), oleLoanDocument, new Timestamp(new Date().getTime()), new Timestamp(oleLoanDocument.getPastDueDate().getTime()),true);
                     String content = "";
                     if(StringUtils.isNotEmpty(billNumber)){
                         content = "Successfully Renewed. Overdue fine exists for Item (" + oleLoanDocument.getItemId() + ")";

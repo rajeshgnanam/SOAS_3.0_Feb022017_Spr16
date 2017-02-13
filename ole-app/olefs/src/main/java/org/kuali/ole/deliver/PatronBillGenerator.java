@@ -35,7 +35,7 @@ public class PatronBillGenerator {
     private CircDeskLocationResolver circDeskLocationResolver;
     private PatronBillHelperService patronBillHelperService;
 
-    public String generatePatronBillPayment(OleLoanDocument oleLoanDocument, String feeTypeName, Double fineAmount, Timestamp dueDate) throws  Exception {
+    public String generatePatronBillPayment(OleLoanDocument oleLoanDocument, String feeTypeName, Double fineAmount, Timestamp dueDate,boolean isRenew) throws  Exception {
         long begin = System.currentTimeMillis();
         StringBuffer contentForSendMail = new StringBuffer();
 
@@ -56,10 +56,14 @@ public class PatronBillGenerator {
         feeType.setPaymentStatus(olePaymentStatus.getPaymentStatusId());
         feeType.setBalFeeAmount(new KualiDecimal(fineAmount));
         feeType.setFeeSource(OLEConstants.SYSTEM);
-        if(oleLoanDocument.getLoanDueDate()!=null){
-            feeType.setDueDate(oleLoanDocument.getLoanDueDate());
-        }else {
-            feeType.setDueDate(dueDate);
+
+        Date billdate = new Date();
+
+        if(isRenew){
+            feeType.setDueDate(oleLoanDocument.getPastDueDate()!=null ? new Timestamp(oleLoanDocument.getPastDueDate().getTime()) : dueDate);
+            feeType.setRenewalDate(new Timestamp(billdate.getTime()));
+        }else{
+            feeType.setDueDate(oleLoanDocument.getLoanDueDate()!=null ? oleLoanDocument.getLoanDueDate():dueDate);
         }
         if(oleLoanDocument.isOverrideCheckInTime()){
             feeType.setOverrideCheckInDate(oleLoanDocument.getCheckInDate());
@@ -71,8 +75,6 @@ public class PatronBillGenerator {
         feeType.setCheckOutDate(oleLoanDocument.getCreateDate());
         List<FeeType> feeTypes = new ArrayList<FeeType>();
         feeTypes.add(feeType);
-
-        Date billdate = new Date();
 
         patronBillPayment = new PatronBillPayment();
         patronBillPayment.setBillDate(oleLoanDocument.getCheckInDate() != null ? new java.sql.Date(oleLoanDocument.getCheckInDate().getTime()) : new java.sql.Date(billdate.getTime()));

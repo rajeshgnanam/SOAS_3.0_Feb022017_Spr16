@@ -97,7 +97,7 @@ public class RenewItemExecutor implements Callable {
                                 List<OLEDeliverNotice> oleDeliverNotices = getCircUtilController().processNotices(oleLoanDocument, oleItemRecordForCirc.getItemRecord(), null);
                                         oleLoanDocument.setDeliverNotices(oleDeliverNotices);
                                         if (null != oleLoanDocument.getLoanId()) {
-                                            String billNumber = getCircUtilController().generateBillPayment(oleLoanDocument.getCirculationLocationId(), oleLoanDocument, new Timestamp(new Date().getTime()), new Timestamp(oleLoanDocument.getPastDueDate().getTime()));
+                                            String billNumber = getCircUtilController().generateBillPayment(oleLoanDocument.getCirculationLocationId(), oleLoanDocument, new Timestamp(new Date().getTime()), new Timestamp(oleLoanDocument.getPastDueDate().getTime()),true);
                                             if(StringUtils.isNotEmpty(billNumber)){
                                                 finalDroolResponse.setSucessMessage("Successfully Renewed. Overdue fine exists");
                                             }else{
