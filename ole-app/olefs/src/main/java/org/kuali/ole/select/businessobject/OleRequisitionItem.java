@@ -1202,7 +1202,9 @@ public class OleRequisitionItem extends RequisitionItem implements OlePurchasing
      * @param oleItemQuantity The oleItemQuantity to set.
      */
     public void setOleItemQuantity(KualiInteger oleItemQuantity) {
-        super.setItemQuantity(new KualiDecimal(oleItemQuantity.intValue()));
+        if(oleItemQuantity!=null) {
+            super.setItemQuantity(new KualiDecimal(oleItemQuantity.intValue()));
+        }
     }
 
     /*
