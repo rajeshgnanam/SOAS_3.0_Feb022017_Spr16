@@ -258,7 +258,7 @@ public class RenewItemExecutor implements Callable {
     }
 
     private boolean isPatronExpirationGreaterThanToday(Timestamp expirationDate) {
-        return expirationDate.compareTo(new Date()) > 0;
+        return expirationDate.compareTo(new Date()) < 0;
     }
 
     private boolean isPatronExpiringBeforeLoanDue(OleLoanDocument oleLoanDocument, Timestamp expirationDate) {
