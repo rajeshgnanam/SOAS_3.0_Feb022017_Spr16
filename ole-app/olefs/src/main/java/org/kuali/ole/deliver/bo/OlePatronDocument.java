@@ -85,6 +85,7 @@ public class OlePatronDocument extends PersistableBusinessObjectBase implements 
     private String lostDescription;
     private String lostOperatorId;
     private boolean invalidateBarcode;
+    private boolean userNoteExists;
     private boolean reinstateBarcode;
     private boolean skipBarcodeValidation;
     private boolean barcodeChanged;
@@ -278,6 +279,14 @@ public class OlePatronDocument extends PersistableBusinessObjectBase implements 
         this.setPagingPrivilege(true);
         this.setCourtesyNotice(true);
         this.setBarcodeEditable(true);
+    }
+
+    public boolean isUserNoteExists() {
+        return userNoteExists;
+    }
+
+    public void setUserNoteExists(boolean userNoteExists) {
+        this.userNoteExists = userNoteExists;
     }
 
     public boolean isUpload() {

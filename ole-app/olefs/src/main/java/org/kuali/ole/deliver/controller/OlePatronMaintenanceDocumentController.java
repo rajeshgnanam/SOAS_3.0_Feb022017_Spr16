@@ -163,6 +163,8 @@ public class OlePatronMaintenanceDocumentController extends MaintenanceDocumentC
         if (CollectionUtils.isNotEmpty(patronDocument.getPatronBillPayments())) {
             patronDocument.setPatronBillFileName(OLEConstants.OlePatron.PATRON_VIEW_BILLS);
             patronDocument.setViewBillUrl(OLEConstants.OlePatron.PATRON_VIEW_BILL_URL + patronDocument.getOlePatronId());
+        }if(patronDocument.getOlePatronUserNotes().size()>0){
+            patronDocument.setUserNoteExists(true);
         }
         return getUIFModelAndView(form);
     }

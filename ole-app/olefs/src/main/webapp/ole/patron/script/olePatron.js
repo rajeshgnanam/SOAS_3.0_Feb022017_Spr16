@@ -17,6 +17,7 @@ jq(document).ready(function(){
 
 
     showBarcodeUpdateDialogBox();
+    showPatronUserNoteDialogBox();
     if(jq("#showReinstateDialogBox_control").val()=='true'){
         reinstateDialog();
     }
@@ -214,6 +215,11 @@ function closeUpdateBarcodeDialog(){
     jq("#overviewId input#barcode_control").attr("disabled", "disabled");
 }
 
+function closePatronUserNoteDialog(){
+    jq("div#OlePatronDocument-user-note-Section").fadeOut(300);
+    jq('#mask').fadeOut(300);
+}
+
 function closeReinstateDialog(){
     jq("div#OlePatronDocument-reinstateBarcode-section").fadeOut(300);
     jq('#mask').fadeOut(300);
@@ -226,6 +232,12 @@ function showBarcodeUpdateDialogBox(){
     if(jq("#showUpdateBarcodeDialogBox_control").val()=='true'){
         jq("#OlePatronDocument-validation-Message-Section").hide();
         displayDialogWindow("div#OlePatronDocument-Barcode-Update-Section");
+    }
+}
+
+function showPatronUserNoteDialogBox(){
+    if(jq("#showPatronUserNoteDialogBox_control").val()=='true'){
+        displayDialogWindow("div#OlePatronDocument-user-note-Section");
     }
 }
 
