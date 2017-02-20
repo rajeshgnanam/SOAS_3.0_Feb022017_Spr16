@@ -39,7 +39,7 @@ public class CircForm extends OLEForm {
     private boolean itemValidationDone;
     private boolean itemOverride;
     private boolean requestExistOrLoanedCheck;
-    private String isRequestAvailable;
+    private String cancelRequest;
 
     /*
     patronBarcode: Current Borrower
@@ -618,11 +618,11 @@ public class CircForm extends OLEForm {
         this.itemFoundInLibrary = itemFoundInLibrary;
     }
 
-    public String getIsRequestAvailable() {
-        return isRequestAvailable;
+    public String getCancelRequest() {
+        return cancelRequest;
     }
 
-    public void setIsRequestAvailable(String isRequestAvailable) {
-        this.isRequestAvailable = isRequestAvailable;
+    public void setCancelRequest(String cancelRequest) {
+        this.cancelRequest = cancelRequest;
     }
 }
