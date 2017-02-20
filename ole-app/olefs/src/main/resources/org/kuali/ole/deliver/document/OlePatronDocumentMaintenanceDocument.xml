@@ -88,9 +88,12 @@
                 <ref bean="OlePatronDocument-InvalidOrLostBarcodeSection-Wrapper" />
                 <ref bean="OlePatronDocument-Barcode-Update-Section" />
                 <ref bean="OlePatronDocument-user-note-Section" />
+                <ref bean="OlePatronDocument-userBlock-note-Section" />
+                <ref bean="OlePatronDocument-Block-Section" />
                <!-- <ref bean="OlePatronDocument-MissingPiecesItemInfo"/>-->
                 <ref bean="showUpdateBarcodeDialogBox"/>
                 <ref bean="showPatronUserNoteDialogBox"/>
+                <ref bean="showPatronBlockDialogBox"/>
                 <ref bean="showReinstateDialogBox"/>
                 <ref bean="OlePatronDocument-reinstateBarcode-section"/>
                 <ref bean="Refresh-OlePatronDocument-InvalidOrLostBarcodeSection"/>
@@ -1943,13 +1946,30 @@
         </property>
     </bean>
 
-    <bean id="OlePatronDocument-user-note-Section" parent="Uif-VerticalBoxSection" p:render="@{document.newMaintainableObject.dataObject.userNoteExists}">
+    <bean id="OlePatronDocument-userBlock-note-Section" parent="Uif-VerticalBoxSection" p:render="@{document.newMaintainableObject.dataObject.userNoteExists and document.newMaintainableObject.dataObject.generalBlockPatrn}">
         <property name="items">
             <list>
                 <bean parent="Uif-VerticalFieldGroup">
                     <property name="items">
                         <list>
-                            <bean id="errorMessage_patronUserNote1" parent="Uif-MessageField" p:messageText="Please select a patron user note to delete" p:hidden="true" p:cssClasses="alert-error" />
+                            <ref bean="errorMessage_patronUserNote1"/>
+                            <ref bean="patronUserNoteDisplaySection1"/>
+                            <ref bean="patronBlockSection1"/>
+                            <ref bean="patronUserBlockButtonSection1"/>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="OlePatronDocument-user-note-Section" parent="Uif-VerticalBoxSection" p:render="@{document.newMaintainableObject.dataObject.userNoteExists and !(document.newMaintainableObject.dataObject.generalBlockPatrn)}">
+        <property name="items">
+            <list>
+                <bean parent="Uif-VerticalFieldGroup">
+                    <property name="items">
+                        <list>
+                            <ref bean="errorMessage_patronUserNote1"/>
                             <ref bean="patronUserNoteDisplaySection1"/>
                             <ref bean="patronUserNoteButtonSection1"/>
                         </list>
@@ -1958,6 +1978,23 @@
             </list>
         </property>
     </bean>
+
+    <bean id="OlePatronDocument-Block-Section" parent="Uif-VerticalBoxSection" p:render="@{!(document.newMaintainableObject.dataObject.userNoteExists) and document.newMaintainableObject.dataObject.generalBlockPatrn}">
+        <property name="items">
+            <list>
+                <bean parent="Uif-VerticalFieldGroup">
+                    <property name="items">
+                        <list>
+                            <ref bean="patronBlockSection1"/>
+                            <ref bean="patronBlockButtonSection1"/>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="errorMessage_patronUserNote1" parent="Uif-MessageField" p:messageText="Please select a patron user note to delete" p:hidden="true" p:cssClasses="alert-error" />
 
     <bean id="patronUserNoteDisplaySection1" parent="Uif-TableCollectionSection">
         <property name="collectionObjectClass" value="org.kuali.ole.deliver.bo.OlePatronNotes"/>
@@ -1982,8 +2019,28 @@
                         <bean parent="Uif-CheckboxControl" p:cssClasses="patronNotesCheckBoxClass" />
                     </property>
                 </bean>
-                <bean id="patronUserNoteText1" parent="Uif-DataField" p:style="font-weight:bold;" p:propertyName="patronNoteText" p:label="Patron User Notes">
-                </bean>
+                <bean id="patronUserNoteType1" parent="Uif-DataField" p:style="font-weight:bold;" p:propertyName="olePatronNoteType.patronNoteTypeCode" p:label="Patron User Note Type"/>
+                <bean id="patronUserNoteText1" parent="Uif-DataField" p:style="font-weight:bold;" p:propertyName="patronNoteText" p:label="Patron User Notes"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="patronUserBlockButtonSection1" parent="Uif-HorizontalBoxSubSection">
+        <property name="items">
+            <list>
+                <bean id="patronUserBlockCloseBtn1" parent="Uif-SecondaryActionButton-Small"
+                      p:actionScript="closePatronUserNoteBlockDialog()"
+                      p:actionLabel="Close"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="patronBlockButtonSection1" parent="Uif-HorizontalBoxSubSection">
+        <property name="items">
+            <list>
+                <bean id="patronBlockCloseBtn1" parent="Uif-SecondaryActionButton-Small"
+                      p:actionScript="closePatronBlockDialog()"
+                      p:actionLabel="Close"/>
             </list>
         </property>
     </bean>
@@ -1991,14 +2048,17 @@
     <bean id="patronUserNoteButtonSection1" parent="Uif-HorizontalBoxSubSection">
         <property name="items">
             <list>
-                <bean id="patronUserNoteDeleteBtn1" parent="Uif-SecondaryActionButton-Small"
-                      p:actionScript="
-                      closePatronUserNoteDialog()"
-                      p:actionLabel="Delete"/>
-
                 <bean id="patronUserNoteCloseBtn1" parent="Uif-SecondaryActionButton-Small"
                       p:actionScript="closePatronUserNoteDialog()"
                       p:actionLabel="Close"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="patronBlockSection1" parent="Uif-HorizontalBoxSubSection">
+        <property name="items">
+            <list>
+                <bean id="OlePatronDocument-Block-Message-Section" parent="Uif-MessageField" p:messageText="Patron is Blocked" />
             </list>
         </property>
     </bean>
@@ -2063,6 +2123,12 @@
     </bean>
 
     <bean id="showPatronUserNoteDialogBox" parent="OlePatron-InputField" p:propertyName="userNoteExists" p:hidden="true" >
+        <property name="control">
+            <bean parent="Uif-HiddenControl"/>
+        </property>
+    </bean>
+
+    <bean id="showPatronBlockDialogBox" parent="OlePatron-InputField" p:propertyName="generalBlockPatrn" p:hidden="true" >
         <property name="control">
             <bean parent="Uif-HiddenControl"/>
         </property>
