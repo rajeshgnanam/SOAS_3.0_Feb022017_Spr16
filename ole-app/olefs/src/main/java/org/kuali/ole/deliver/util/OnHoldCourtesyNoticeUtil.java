@@ -6,6 +6,8 @@ import org.kuali.ole.OLEParameterConstants;
 import org.kuali.ole.deliver.batch.OleMailer;
 import org.kuali.ole.deliver.bo.OleDeliverRequestBo;
 import org.kuali.ole.deliver.bo.OlePatronDocument;
+import org.kuali.ole.deliver.notice.service.OleNoticeService;
+import org.kuali.ole.deliver.notice.service.impl.OleNoticeServiceImpl;
 import org.kuali.ole.deliver.service.CircDeskLocationResolver;
 import org.kuali.ole.deliver.service.ParameterValueResolver;
 import org.kuali.ole.service.OlePatronHelperService;
@@ -234,7 +236,7 @@ public class OnHoldCourtesyNoticeUtil {
                 noticeContent = noticeContent.replace(']', ' ');
                 if (!noticeContent.trim().equals("")) {
                     OleMailer oleMailer = getOleMailer();
-                    oleMailer.sendEmail(new EmailFrom(fromAddress), new EmailTo(emailAddress), new EmailSubject(OLEConstants.NOTICE_HOLD_COURTESY_SUBJECT), new EmailBody(noticeContent), true);
+                    oleMailer.sendEmail(new EmailFrom(fromAddress), new EmailTo(emailAddress), new EmailSubject(new OleNoticeServiceImpl().getNoticeSubjectForNoticeType(OLEConstants.NOTICE_HOLD_COURTESY)), new EmailBody(noticeContent), true);
                 }
             } else {
             }
@@ -246,11 +248,8 @@ public class OnHoldCourtesyNoticeUtil {
 
     public void sendOnHoldNotice(OleDeliverRequestBo oleDeliverRequestBo){
         Map<String,String> fieldLabelMap  = new HashMap<>();
-        fieldLabelMap.put("noticeTitle",getParameterResolverInstance().getParameter(OLEConstants.APPL_ID, OLEConstants
-                .DLVR_NMSPC, OLEConstants.DLVR_CMPNT, OLEParameterConstants
-                .ONHOLD_TITLE));
-        fieldLabelMap.put("noticeBody",getParameterResolverInstance().getParameter(OLEConstants.APPL_ID, OLEConstants
-                .DLVR_NMSPC, OLEConstants.DLVR_CMPNT, OLEParameterConstants.ONHOLD_BODY));
+        fieldLabelMap.put("noticeTitle","OnHoldNotice");
+        fieldLabelMap.put("noticeBody"," The following requested item(s) is ready for pick-up and will be held until the expiration date at the location shown below.");
         String mailContent = generateRequestMailContentForPatron(oleDeliverRequestBo,fieldLabelMap);
         sendMail(oleDeliverRequestBo,mailContent);
     }
