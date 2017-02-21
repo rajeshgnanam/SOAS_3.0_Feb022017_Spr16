@@ -646,7 +646,8 @@ var orderFields = [
     {id: 'vendorNumber', name: 'Vendor Number'},
     {id: 'vendorProfileCode', name: 'Vendor Profile Code'},
     {id: 'vendorItemIdentifier', name: 'Vendor Item Identifier'},
-    {id: 'volumeNumber', name: 'Volume Number'}
+    {id: 'volumeNumber', name: 'Volume Number'},
+    {id: 'singleCopyNumber', name: 'Single Copy Number'}
 ];
 
 var discountTypes = [
