@@ -196,15 +196,15 @@ public abstract class CheckinBaseController extends CircUtilController {
     }
 
     public DroolsResponse preValidations(ItemRecord itemRecord, OLEForm oleForm) {
-        return preValidationForLost(itemRecord, oleForm);
+        return preValidationForLostItemWithReplacementBill(itemRecord, oleForm);
     }
 
-    public DroolsResponse preValidationForLost(ItemRecord itemRecord, OLEForm oleForm) {
+   /* public DroolsResponse preValidationForLost(ItemRecord itemRecord, OLEForm oleForm) {
         DroolsResponse droolsResponse;
         droolsResponse = checkForLostItem(itemRecord);
         if (droolsResponse != null) return droolsResponse;
         return preValidationForLostItemWithReplacementBill(itemRecord, oleForm);
-    }
+    }*/
 
     public DroolsResponse preValidationForLostItemWithReplacementBill(ItemRecord itemRecord, OLEForm oleForm) {
         DroolsResponse droolsResponse;
@@ -589,7 +589,7 @@ public abstract class CheckinBaseController extends CircUtilController {
         return null;
     }
 
-    private DroolsResponse checkForLostItem(ItemRecord itemRecord) {
+   /* private DroolsResponse checkForLostItem(ItemRecord itemRecord) {
         String itemStatus = itemRecord.getItemStatusRecord().getCode();
         if (StringUtils.isNotBlank(itemStatus) && itemStatus.equals(OLEConstants.ITEM_STATUS_LOST)) {
             DroolsResponse droolsResponse = new DroolsResponse();
@@ -599,7 +599,7 @@ public abstract class CheckinBaseController extends CircUtilController {
         }
         return null;
     }
-
+*/
     private DroolsResponse checkForLostItemWithReplacemntBill(ItemRecord itemRecord) {
 
         String itemStatus = itemRecord.getItemStatusRecord().getCode();
