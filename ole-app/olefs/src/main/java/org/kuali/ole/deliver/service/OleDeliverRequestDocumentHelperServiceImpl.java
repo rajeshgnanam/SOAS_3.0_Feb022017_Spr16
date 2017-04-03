@@ -40,11 +40,9 @@ import org.kuali.ole.deliver.util.DroolsResponse;
 import org.kuali.ole.deliver.util.LoanDateTimeUtil;
 import org.kuali.ole.deliver.util.NoticeInfo;
 import org.kuali.ole.deliver.util.OlePatronRecordUtil;
-import org.kuali.ole.deliver.service.impl.OLEDeliverNoticeHelperServiceImpl;
 import org.kuali.ole.deliver.util.*;
 import org.kuali.ole.describe.bo.OleInstanceItemType;
 import org.kuali.ole.describe.bo.OleLocation;
-import org.kuali.ole.describe.bo.OleLocationLevel;
 import org.kuali.ole.describe.keyvalue.LocationValuesBuilder;
 import org.kuali.ole.docstore.common.client.DocstoreClientLocator;
 import org.kuali.ole.docstore.common.constants.DocstoreConstants;
@@ -64,7 +62,6 @@ import org.kuali.ole.module.purap.util.PurApDateFormatUtils;
 import org.kuali.ole.ncip.bo.OLEPlaceRequest;
 import org.kuali.ole.ncip.converter.OLEPlaceRequestConverter;
 import org.kuali.ole.service.OleCirculationPolicyService;
-import org.kuali.ole.service.OleCirculationPolicyServiceImpl;
 import org.kuali.ole.service.OlePatronHelperService;
 import org.kuali.ole.service.OlePatronHelperServiceImpl;
 import org.kuali.ole.sys.context.SpringContext;
@@ -89,7 +86,6 @@ import org.kuali.rice.kim.api.role.RoleService;
 import org.kuali.rice.kim.api.services.KimApiServiceLocator;
 import org.kuali.rice.kim.impl.identity.type.EntityTypeContactInfoBo;
 import org.kuali.rice.krad.UserSession;
-import org.kuali.rice.krad.dao.impl.PersistenceDaoOjb;
 import org.kuali.rice.krad.maintenance.MaintenanceDocument;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.service.DocumentService;
@@ -139,7 +135,6 @@ public class OleDeliverRequestDocumentHelperServiceImpl {
     private OlePatronHelperService olePatronHelperService;
     private CircDeskLocationResolver circDeskLocationResolver;
     private OleLoanDocumentsFromSolrBuilder oleLoanDocumentsFromSolrBuilder;
-    private OnHoldCourtesyNoticeUtil onHoldCourtesyNotice;
     private ParameterValueResolver parameterResolverInstance;
     private OleMailer oleMailer;
     private NoticeSolrInputDocumentGenerator noticeSolrInputDocumentGenerator;
@@ -170,13 +165,6 @@ public class OleDeliverRequestDocumentHelperServiceImpl {
             parameterResolverInstance = ParameterValueResolver.getInstance();
         }
         return parameterResolverInstance;
-    }
-
-    public OnHoldCourtesyNoticeUtil getonHoldCourtesyNotice(){
-        if(onHoldCourtesyNotice==null){
-            onHoldCourtesyNotice=new OnHoldCourtesyNoticeUtil();
-        }
-        return onHoldCourtesyNotice;
     }
 
     public OleMailer getOleMailer() {
@@ -1782,6 +1770,28 @@ public class OleDeliverRequestDocumentHelperServiceImpl {
                                 (fmt.format(oleDeliverRequestBoList.get(i).getHoldExpirationDate())).compareTo(fmt.format(new Date(System.currentTimeMillis()))) < 0) {
                             deleteRequest(oleDeliverRequestBoList.get(i).getRequestId(), oleDeliverRequestBoList.get(i).getItemUuid(), oleDeliverRequestBoList.get(i).getOperatorCreateId(), oleDeliverRequestBoList.get(i).getLoanTransactionRecordNumber(), ConfigContext.getCurrentContextConfig().getProperty(OLEConstants.REQUEST_EXPIRED));
                         }
+                        else if(oleDeliverRequestBoList.get(i).getHoldExpirationDate()  != null && oleDeliverRequestBoList.get(i).getRequestExpiryDate() != null) {
+                            if((fmt.format(oleDeliverRequestBoList.get(i).getRequestExpiryDate()).compareTo(fmt.format(new Date(System.currentTimeMillis()))) < 0) &&
+                            (fmt.format(oleDeliverRequestBoList.get(i).getHoldExpirationDate()).compareTo(fmt.format(new Date(System.currentTimeMillis()))) < 0)) {
+                                deleteRequest(oleDeliverRequestBoList.get(i).getRequestId(), oleDeliverRequestBoList.get(i).getItemUuid(), oleDeliverRequestBoList.get(i).getOperatorCreateId(), oleDeliverRequestBoList.get(i).getLoanTransactionRecordNumber(), ConfigContext.getCurrentContextConfig().getProperty(OLEConstants.REQUEST_EXPIRED));
+                            }
+                        }
+                    }
+                    else  {
+                        if (oleDeliverRequestBoList.get(i).getHoldExpirationDate() == null && oleDeliverRequestBoList.get(i).getRequestExpiryDate() != null &&
+                                fmt.format(oleDeliverRequestBoList.get(i).getRequestExpiryDate()).compareTo(fmt.format(new Date(System.currentTimeMillis()))) < 0) {
+                            deleteRequest(oleDeliverRequestBoList.get(i).getRequestId(), oleDeliverRequestBoList.get(i).getItemUuid(), oleDeliverRequestBoList.get(i).getOperatorCreateId(), oleDeliverRequestBoList.get(i).getLoanTransactionRecordNumber(), ConfigContext.getCurrentContextConfig().getProperty(OLEConstants.REQUEST_EXPIRED));
+                        }
+                        else if (oleDeliverRequestBoList.get(i).getHoldExpirationDate() != null &&
+                                (fmt.format(oleDeliverRequestBoList.get(i).getHoldExpirationDate())).compareTo(fmt.format(new Date(System.currentTimeMillis()))) < 0) {
+                            deleteRequest(oleDeliverRequestBoList.get(i).getRequestId(), oleDeliverRequestBoList.get(i).getItemUuid(), oleDeliverRequestBoList.get(i).getOperatorCreateId(), oleDeliverRequestBoList.get(i).getLoanTransactionRecordNumber(), ConfigContext.getCurrentContextConfig().getProperty(OLEConstants.REQUEST_EXPIRED));
+                        }
+                        else if(oleDeliverRequestBoList.get(i).getHoldExpirationDate()  != null && oleDeliverRequestBoList.get(i).getRequestExpiryDate() != null) {
+                            if((fmt.format(oleDeliverRequestBoList.get(i).getRequestExpiryDate()).compareTo(fmt.format(new Date(System.currentTimeMillis()))) < 0) &&
+                                    (fmt.format(oleDeliverRequestBoList.get(i).getHoldExpirationDate()).compareTo(fmt.format(new Date(System.currentTimeMillis()))) < 0)) {
+                                deleteRequest(oleDeliverRequestBoList.get(i).getRequestId(), oleDeliverRequestBoList.get(i).getItemUuid(), oleDeliverRequestBoList.get(i).getOperatorCreateId(), oleDeliverRequestBoList.get(i).getLoanTransactionRecordNumber(), ConfigContext.getCurrentContextConfig().getProperty(OLEConstants.REQUEST_EXPIRED));
+                            }
+                        }
                     }
 
                 } catch (Exception e) {
@@ -2752,7 +2762,6 @@ public class OleDeliverRequestDocumentHelperServiceImpl {
 
                 try {
                     requestId = ":" + OLEConstants.OleDeliverRequest.REQUEST_ID + ":" + oleDeliverRequestBo.getRequestId();
-
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Request Raised Succesfully" + requestId);
                     }
@@ -4266,6 +4275,7 @@ public class OleDeliverRequestDocumentHelperServiceImpl {
             item.setCategory(OLEConstants.WORK_CATEGORY);
             item.setType(DocType.ITEM.getCode());
             item.setFormat(OLEConstants.OLEML_FORMAT);
+            item.setStaffOnly(oleItem.isStaffOnlyFlag());
             getDocstoreClientLocator().getDocstoreClient().updateItem(item);
         } catch (Exception e) {
             LOG.error(OLEConstants.ITM_STS_TO_DOC_FAIL + e, e);
