@@ -4934,6 +4934,7 @@ public class OleDeliverRequestDocumentHelperServiceImpl {
                         oleDeliverRequestBo.setNoticeType(noticeInfo.getNoticeType());
                         oleDeliverRequestBo.setRecallDueDate(new Timestamp(oleLoanDocument.getLoanDueDate().getTime()));
                         oleDeliverRequestBo.setNewDueDate(new java.sql.Date(oleLoanDocument.getLoanDueDate().getTime()));
+                        oleDeliverRequestBo.setOriginalDueDate(new java.sql.Date(oleLoanDocument.getLoanDueDate().getTime()));
                     }
                 }
 
