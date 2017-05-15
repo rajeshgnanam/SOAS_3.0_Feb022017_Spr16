@@ -345,6 +345,9 @@ public class WorkItemOlemlEditor extends AbstractEditor {
     public EditorForm saveDocument(EditorForm editorForm) {
         WorkInstanceOlemlForm workInstanceOlemlForm = (WorkInstanceOlemlForm) editorForm.getDocumentForm();
         Item itemData = workInstanceOlemlForm.getSelectedItem();
+        if(itemData.getAccessInformation()!=null && itemData.getAccessInformation().getBarcode()!=null) {
+            itemData.getAccessInformation().setBarcode(itemData.getAccessInformation().getBarcode().toUpperCase());
+        }
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
         String dateStr = sdf.format(date);
