@@ -4,13 +4,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.ole.OLEConstants;
-import org.kuali.ole.OLEParameterConstants;
 import org.kuali.ole.deliver.OleLoanDocumentsFromSolrBuilder;
 import org.kuali.ole.deliver.PatronBillGenerator;
 import org.kuali.ole.deliver.bo.*;
 import org.kuali.ole.deliver.controller.drools.RuleExecutor;
 import org.kuali.ole.deliver.controller.notices.*;
 import org.kuali.ole.deliver.notice.bo.OleNoticeContentConfigurationBo;
+import org.kuali.ole.deliver.notice.bo.OleNoticeFieldLabelMapping;
 import org.kuali.ole.deliver.notice.executors.LoanNoticesExecutor;
 import org.kuali.ole.deliver.notice.service.impl.OleNoticeServiceImpl;
 import org.kuali.ole.deliver.service.*;
@@ -665,6 +665,13 @@ public class CircUtilController extends RuleExecutor {
                     .DLVR_NMSPC, OLEConstants.DLVR_CMPNT, noticeContent));
             oleNoticeContentConfigurationBo.setNoticeSubjectLine(new OleNoticeServiceImpl().getNoticeSubjectForNoticeType(noticeType));
             oleNoticeContentConfigurationBo.setNoticeFooterBody("");
+            OleNoticeFieldLabelMapping oleNoticeFieldLabelMapping =new OleNoticeFieldLabelMapping();
+            oleNoticeFieldLabelMapping.setFieldName("Claims Search Count");
+            oleNoticeFieldLabelMapping.setFieldLabel("Claims Search Count");
+            oleNoticeFieldLabelMapping.setBelongsTo("ITEM");
+            oleNoticeFieldLabelMapping.setOleNoticeContentConfigurationBo(oleNoticeContentConfigurationBo);
+            oleNoticeContentConfigurationBo.getOleNoticeItemFieldLabelMappings().add(oleNoticeFieldLabelMapping);
+
         }
         return oleNoticeContentConfigurationBo;
     }

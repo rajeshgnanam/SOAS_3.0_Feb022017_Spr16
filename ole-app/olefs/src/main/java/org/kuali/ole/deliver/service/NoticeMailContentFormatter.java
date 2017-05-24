@@ -120,6 +120,7 @@ public abstract class NoticeMailContentFormatter {
         oleNoticeBo.setItemShelvingLocation((getLocationName(oleLoanDocument.getItemLocation()) != null ? getLocationName(oleLoanDocument.getItemLocation()) : ""));
         oleNoticeBo.setCheckInDate(oleLoanDocument.getCheckInDate() != null ? (StringUtils.isNotBlank(oleLoanDocument.getCheckInDate().toString()) ? oleLoanDocument.getCheckInDate().toString() : "") : "");
         oleNoticeBo.setMissingPieceNote(StringUtils.isNotBlank(oleLoanDocument.getMissingPieceNote()) ? oleLoanDocument.getMissingPieceNote() : "");
+        oleNoticeBo.setClaimsSearchCount(oleLoanDocument.getClaimsSearchCount());
         oleLoanDocument.setOleCirculationDesk(getCircDeskLocationResolver().getOleCirculationDesk(oleLoanDocument.getCirculationLocationId()));
         if (oleLoanDocument.getOleCirculationDesk() != null) {
             oleNoticeBo.setCirculationDeskName(oleLoanDocument.getOleCirculationDesk().getCirculationDeskPublicName());
