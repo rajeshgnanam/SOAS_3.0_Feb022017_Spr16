@@ -11,7 +11,8 @@
             <property name="valueType">dynamic</property>
             <property name="isRequired">true</property>
             <property name="dataSetName">Library</property>
-            <expression name="valueExpr" type="javascript">dataSetRow["Library"]</expression>
+            <expression name="valueExpr" type="javascript">dataSetRow["LOCN_CD"]</expression>
+            <expression name="labelExpr" type="javascript">dataSetRow["LOCN_CD"]</expression>
             <property name="dataType">string</property>
             <property name="distinct">true</property>
             <list-property name="selectionList"/>
@@ -68,7 +69,7 @@
                 </ex-property>
             </list-property>
             <property name="odaDriverClass">com.mysql.jdbc.Driver</property>
-            <property name="odaURL">jdbc:mysql://localhost/ole_16_new</property>
+            <property name="odaURL">jdbc:mysql://localhost/ole</property>
             <property name="odaUser">root</property>
             <encrypted-property name="odaPassword" encryptionID="base64">cm9vdA==</encrypted-property>
         </oda-data-source>
@@ -99,6 +100,12 @@
                     <property name="analysis">dimension</property>
                     <text-property name="displayName">Author</text-property>
                     <text-property name="heading">Author</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">CALL_NUMBER_PREFIX</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">CALL_NUMBER_PREFIX</text-property>
+                    <text-property name="heading">CALL_NUMBER_PREFIX</text-property>
                 </structure>
                 <structure>
                     <property name="columnName">Call Number</property>
@@ -164,51 +171,56 @@
                     </structure>
                     <structure>
                         <property name="position">3</property>
-                        <property name="name">Call Number</property>
+                        <property name="name">CALL_NUMBER_PREFIX</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
-                        <property name="name">Enumeration</property>
+                        <property name="name">Call Number</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
-                        <property name="name">Location</property>
+                        <property name="name">Enumeration</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
-                        <property name="name">Location Level</property>
+                        <property name="name">Location</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">7</property>
-                        <property name="name">Library Location Level Name</property>
+                        <property name="name">Location Level</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">8</property>
-                        <property name="name">Item Type</property>
+                        <property name="name">Library Location Level Name</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">9</property>
+                        <property name="name">Item Type</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">10</property>
                         <property name="name">Date Missing/Lost Status Added</property>
                         <property name="dataType">date-time</property>
                     </structure>
                     <structure>
-                        <property name="position">10</property>
+                        <property name="position">11</property>
                         <property name="name">Missing Piece</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
-                        <property name="position">11</property>
+                        <property name="position">12</property>
                         <property name="name">Library</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
-                        <property name="position">12</property>
+                        <property name="position">13</property>
                         <property name="name">Item Availability Status</property>
                         <property name="dataType">string</property>
                     </structure>
@@ -245,55 +257,62 @@ dataSetRow["Item Availability Status"] = deliverReport.getItemAvailabilityStatus
                 </structure>
                 <structure>
                     <property name="position">3</property>
+                    <property name="name">CALL_NUMBER_PREFIX</property>
+                    <property name="nativeName">CALL_NUMBER_PREFIX</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
                     <property name="name">Call Number</property>
                     <property name="nativeName">Call Number</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
-                    <property name="position">4</property>
+                    <property name="position">5</property>
                     <property name="name">Enumeration</property>
                     <property name="nativeName">Enumeration</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
-                    <property name="position">5</property>
+                    <property name="position">6</property>
                     <property name="name">Location</property>
                     <property name="nativeName">Location</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
-                    <property name="position">6</property>
+                    <property name="position">7</property>
                     <property name="name">Location Level</property>
                     <property name="nativeName">Location Level</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
-                    <property name="position">7</property>
+                    <property name="position">8</property>
                     <property name="name">Library Location Level Name</property>
                     <property name="nativeName">Library Location Level Name</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
-                    <property name="position">8</property>
+                    <property name="position">9</property>
                     <property name="name">Item Type</property>
                     <property name="nativeName">Item Type</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
-                    <property name="position">9</property>
+                    <property name="position">10</property>
                     <property name="name">Date Missing/Lost Status Added</property>
                     <property name="nativeName">Date Missing/Lost Status Added</property>
                     <property name="dataType">date-time</property>
                     <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
-                    <property name="position">10</property>
+                    <property name="position">11</property>
                     <property name="name">Missing Piece</property>
                     <property name="nativeName">Missing Piece</property>
                     <property name="dataType">string</property>
@@ -303,7 +322,8 @@ dataSetRow["Item Availability Status"] = deliverReport.getItemAvailabilityStatus
             <xml-property name="queryText"><![CDATA[select 
 ODBI.TITLE as "Title",
 ODBI.AUTHOR as "Author",
-CASE WHEN ODI.CALL_NUMBER IS NOT NULL AND ODI.CALL_NUMBER != ' ' THEN ODI.CALL_NUMBER 
+ODI.CALL_NUMBER_PREFIX,
+CASE WHEN ODI.CALL_NUMBER IS NOT NULL AND ODI.CALL_NUMBER != ' ' THEN ODI.CALL_NUMBER
 	WHEN ODH.CALL_NUMBER IS NOT NULL AND ODH.CALL_NUMBER != ' ' THEN ODH.CALL_NUMBER 
 	ELSE ' ' 
 END as "Call Number",
@@ -339,10 +359,10 @@ ODBI.BIB_ID = ODH.BIB_ID]]></xml-property>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Library" id="75">
             <list-property name="columnHints">
                 <structure>
-                    <property name="columnName">Library</property>
+                    <property name="columnName">LOCN_CD</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">Library</text-property>
-                    <text-property name="heading">Library</text-property>
+                    <text-property name="displayName">LOCN_CD</text-property>
+                    <text-property name="heading">LOCN_CD</text-property>
                 </structure>
             </list-property>
             <list-property name="parameters"/>
@@ -350,7 +370,7 @@ ODBI.BIB_ID = ODH.BIB_ID]]></xml-property>
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
-                        <property name="name">Library</property>
+                        <property name="name">LOCN_CD</property>
                         <property name="dataType">string</property>
                     </structure>
                 </list-property>
@@ -359,18 +379,18 @@ ODBI.BIB_ID = ODH.BIB_ID]]></xml-property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
-                    <property name="name">Library</property>
-                    <property name="nativeName">Library</property>
+                    <property name="name">LOCN_CD</property>
+                    <property name="nativeName">LOCN_CD</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select OL.LOCN_CD as "Library"
+            <xml-property name="queryText"><![CDATA[select OL.LOCN_CD
 from
 OLE_LOCN_LEVEL_T OLL,
 OLE_LOCN_T OL
 where
-OLL.LEVEL_CD = 'LIBRARY'
+OLL.LEVEL_CD = 'SHELVING'
 and
 OL.LEVEL_ID = OLL.LEVEL_ID]]></xml-property>
         </oda-data-set>
@@ -478,9 +498,17 @@ OL.LEVEL_ID = OLL.LEVEL_ID]]></xml-property>
                     <expression name="expression" type="javascript">dataSetRow["Item Availability Status"]</expression>
                     <property name="dataType">string</property>
                 </structure>
+                <structure>
+                    <property name="name">CALL_NUMBER_PREFIX</property>
+                    <text-property name="displayName">CALL_NUMBER_PREFIX</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["CALL_NUMBER_PREFIX"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
             </list-property>
             <column id="36"/>
             <column id="37"/>
+            <column id="82"/>
             <column id="38"/>
             <column id="39"/>
             <column id="40"/>
@@ -513,6 +541,19 @@ OL.LEVEL_ID = OLL.LEVEL_ID]]></xml-property>
                         <property name="borderTopWidth">thin</property>
                         <label id="58">
                             <text-property name="text">Author</text-property>
+                        </label>
+                    </cell>
+                    <cell id="80">
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="83">
+                            <text-property name="text">Call Number Prefix</text-property>
                         </label>
                     </cell>
                     <cell id="15">
@@ -621,6 +662,19 @@ OL.LEVEL_ID = OLL.LEVEL_ID]]></xml-property>
                         <property name="borderTopWidth">thin</property>
                         <data id="59">
                             <property name="resultSetColumn">Author</property>
+                        </data>
+                    </cell>
+                    <cell id="81">
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <data id="84">
+                            <property name="resultSetColumn">CALL_NUMBER_PREFIX</property>
                         </data>
                     </cell>
                     <cell id="23">
