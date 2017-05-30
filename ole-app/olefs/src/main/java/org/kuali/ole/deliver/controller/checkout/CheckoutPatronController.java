@@ -88,7 +88,7 @@ public class CheckoutPatronController extends CheckoutItemController {
                 showDialog("patronInvalidOrLostDialog", circForm, request, response);
             }
         } else {
-            return handleProxyPatronsIfExists(circForm, result, request, response);
+            return postPatronValidation(circForm, result, request, response);
         }
 
         if(StringUtils.isBlank(circForm.getLightboxScript())){
@@ -121,10 +121,7 @@ public class CheckoutPatronController extends CheckoutItemController {
             DroolsResponse droolsResponse = getPatronLookupCircUIController().processPatronValidation(droolsExchange);
             if (null != droolsResponse && StringUtils.isNotBlank(droolsResponse.retrieveErrorMessage())) {
                 circForm.setErrorMessage(droolsResponse.getErrorMessage());
-               // showErrorMessageDialog(circForm, request, response);
-                showDialog("ptrnValidationErrorMessageDialog", circForm, request, response);
-            } else {
-                postPatronValidation(circForm, result, request, response);
+                showErrorMessageDialog(circForm, request, response);
             }
         }
         if(!StringUtils.isNotBlank(circForm.getErrorMessage().getErrorMessage())){
@@ -144,13 +141,13 @@ public class CheckoutPatronController extends CheckoutItemController {
 
     @RequestMapping(params = "methodToCall=postPatronValidation")
     public ModelAndView postPatronValidation(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                             HttpServletRequest request, HttpServletResponse response) {
+                                             HttpServletRequest request, HttpServletResponse response) throws Exception {
         CircForm circForm = (CircForm) form;
         setProceedWithCheckoutFlag(circForm);
         if(checkForPatronUserNotes(circForm.getDroolsExchange())) {
             showDialog("patronUserNotesDialog", circForm, request, response);
-        } else if(circForm.isAutoCheckout()) {
-            return lookupItemAndSaveLoan(circForm, result, request, response);
+        } else {
+            return handleProxyPatronsIfExists(circForm, result, request, response);
         }
         return getUIFModelAndView(circForm);
     }
@@ -389,7 +386,7 @@ public class CheckoutPatronController extends CheckoutItemController {
         }else{
             boolean hasValidOverridePermissions = new PermissionsValidatorUtil().hasValidOverridePermissions(circForm);
             if(CollectionUtils.isEmpty(circForm.getErrorMessage().getPermissions())){
-                return postPatronValidation(circForm, result, request, response);
+                return postPatronUserNotes(circForm, result, request, response);
             } else {
                 if ((hasValidOverridePermissions)) {
                     if (circForm.isProxyCheckDone() && circForm.isItemValidationDone() && !circForm.isItemOverride() && !circForm.isRequestExistOrLoanedCheck()) {
@@ -403,7 +400,7 @@ public class CheckoutPatronController extends CheckoutItemController {
                         circForm.setRequestExistOrLoanedCheck(false);
                         return proceedToValidateItemAndSaveLoan(circForm, result, request, response);
                     }
-                    return postPatronValidation(circForm, result, request, response);
+                    return postPatronUserNotes(circForm, result, request, response);
                 } else {
                     circForm.setOverridingPrincipalName(null);
                     return showDialog("overrideMessageDialog", circForm, request, response);
