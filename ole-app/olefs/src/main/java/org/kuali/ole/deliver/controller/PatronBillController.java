@@ -216,7 +216,7 @@ public class PatronBillController extends UifControllerBase {
             for (PatronBillPayment patronBillPayment : patronBillPayments) {
                 List<FeeType> feeTypes = patronBillPayment.getFeeType();
                 for (FeeType feeType : feeTypes) {
-                    if(feeType.getPaymentStatusCode().equalsIgnoreCase(OLEConstants.PAYMENT_SUSPENDED)) {
+                    if(feeType.getPaymentStatusCode().equalsIgnoreCase(OLEConstants.PAYMENT_SUSPENDED) && feeType.isActiveItem()) {
                         GlobalVariables.getMessageMap().putErrorWithoutFullErrorPath(KRADConstants.GLOBAL_ERRORS, OLEConstants.PAY_NOT_ALLOWED);
                     }
                 }
@@ -242,7 +242,7 @@ public class PatronBillController extends UifControllerBase {
                 return getUIFModelAndView(form);
             }
             for(FeeType feeType : feeTypes) {
-                if(feeType.getPaymentStatusCode().equalsIgnoreCase(OLEConstants.PAYMENT_SUSPENDED)) {
+                if(feeType.getPaymentStatusCode().equalsIgnoreCase(OLEConstants.PAYMENT_SUSPENDED) && feeType.isActiveItem()) {
                     GlobalVariables.getMessageMap().putErrorWithoutFullErrorPath(KRADConstants.GLOBAL_ERRORS, OLEConstants.PAY_NOT_ALLOWED);
                 }
             }
@@ -322,7 +322,7 @@ public class PatronBillController extends UifControllerBase {
             for (PatronBillPayment patronBillPayment : patronBillPayments) {
                 List<FeeType> feeTypes = patronBillPayment.getFeeType();
                 for (FeeType feeType : feeTypes) {
-                    if(feeType.getPaymentStatusCode().equalsIgnoreCase(OLEConstants.PAYMENT_SUSPENDED)) {
+                    if(feeType.getPaymentStatusCode().equalsIgnoreCase(OLEConstants.PAYMENT_SUSPENDED) && feeType.isActiveItem()) {
                         GlobalVariables.getMessageMap().putErrorWithoutFullErrorPath(KRADConstants.GLOBAL_ERRORS, OLEConstants.FORGIVE_PAY_NOT_ALLOWED);
                     }
                 }
@@ -349,7 +349,7 @@ public class PatronBillController extends UifControllerBase {
                 return getUIFModelAndView(form);
             }
             for(FeeType feeType : feeTypes) {
-                if(feeType.getPaymentStatusCode().equalsIgnoreCase(OLEConstants.PAYMENT_SUSPENDED)) {
+                if(feeType.getPaymentStatusCode().equalsIgnoreCase(OLEConstants.PAYMENT_SUSPENDED) && feeType.isActiveItem()) {
                     GlobalVariables.getMessageMap().putErrorWithoutFullErrorPath(KRADConstants.GLOBAL_ERRORS, OLEConstants.FORGIVE_PAY_NOT_ALLOWED);
                 }
             }
