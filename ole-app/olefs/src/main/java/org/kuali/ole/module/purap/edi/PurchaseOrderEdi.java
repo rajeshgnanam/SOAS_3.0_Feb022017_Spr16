@@ -628,8 +628,6 @@ public class PurchaseOrderEdi {
                 text.append(ediItemValues.get(OLEConstants.EDIBatchProfile.LINE_ITEM) + OLEConstants.OLEBatchProcess.lineSeparator);
             if (ediItemValues.containsKey(OLEConstants.EDIBatchProfile.PURCHASE_LINE_ITEM))
                 text.append(ediItemValues.get(OLEConstants.EDIBatchProfile.PURCHASE_LINE_ITEM) + OLEConstants.OLEBatchProcess.lineSeparator);
-            if (ediItemValues.containsKey(OLEConstants.EDIBatchProfile.ITEM_PRICE))
-                text.append(ediItemValues.get(OLEConstants.EDIBatchProfile.ITEM_PRICE) + OLEConstants.OLEBatchProcess.lineSeparator);
             if (ediItemValues.containsKey(OLEConstants.ITM_AUT))
                 text.append(ediItemValues.get(OLEConstants.ITM_AUT) + OLEConstants.OLEBatchProcess.lineSeparator);
             if (ediItemValues.containsKey(OLEConstants.ITM_TIT))
@@ -640,6 +638,8 @@ public class PurchaseOrderEdi {
                 text.append(ediItemValues.get(OLEConstants.EDIBatchProfile.ITEM_PUBLISHER_DATE) + OLEConstants.OLEBatchProcess.lineSeparator);
             if (ediItemValues.containsKey(OLEConstants.EDIBatchProfile.ITEM_QUANTITY))
                 text.append(ediItemValues.get(OLEConstants.EDIBatchProfile.ITEM_QUANTITY) + OLEConstants.OLEBatchProcess.lineSeparator);
+            if (ediItemValues.containsKey(OLEConstants.EDIBatchProfile.ITEM_PRICE))
+                text.append(ediItemValues.get(OLEConstants.EDIBatchProfile.ITEM_PRICE) + OLEConstants.OLEBatchProcess.lineSeparator);
             if (ediItemValues.containsKey(OLEConstants.EDIBatchProfile.REFERENCE_QUALIFIER_1))
                 text.append(ediItemValues.get(OLEConstants.EDIBatchProfile.REFERENCE_QUALIFIER_1) + OLEConstants.OLEBatchProcess.lineSeparator);
             if (ediItemValues.containsKey(OLEConstants.EDIBatchProfile.REFERENCE_QUALIFIER_2))
