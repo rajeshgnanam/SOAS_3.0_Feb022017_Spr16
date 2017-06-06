@@ -521,7 +521,12 @@ public class CircUtilController extends RuleExecutor {
 
     public String generateBillPayment(String selectedCirculationDesk, OleLoanDocument loanDocument, Timestamp customDueDateMap, Timestamp dueDate,boolean isRenew) {
         String billPayment = null;
-        OlePaymentStatus forgivePaymentStatus = getPaymentStatus(OLEConstants.FORGIVEN);
+        OlePaymentStatus forgivePaymentStatus = new OlePaymentStatus();
+        if(StringUtils.isNotBlank(loanDocument.getItemStatus()) && loanDocument.getItemStatus().equalsIgnoreCase(OLEConstants.ITEM_STATUS_LOST_AND_PAID)){
+            forgivePaymentStatus = getPaymentStatus(OLEConstants.REPLACED);
+        } else{
+            forgivePaymentStatus = getPaymentStatus(OLEConstants.FORGIVEN);
+        }
         ItemFineRate itemFineRate = loanDocument.getItemFineRate();
         List<FeeType> olePatronFeeTypes=loanDocument.getOlePatron().getPatronFeeTypes();
         for(FeeType olePatronfeeType : olePatronFeeTypes){
@@ -531,7 +536,11 @@ public class CircUtilController extends RuleExecutor {
                     oleItemLevelBillPayment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
                     oleItemLevelBillPayment.setAmount(olePatronfeeType.getBalFeeAmount());
                     oleItemLevelBillPayment.setCreatedUser(loanDocument.getLoanOperatorId());
-                    oleItemLevelBillPayment.setPaymentMode(OLEConstants.FORGIVE);
+                    if(StringUtils.isNotBlank(loanDocument.getItemStatus()) && loanDocument.getItemStatus().equalsIgnoreCase(OLEConstants.ITEM_STATUS_LOST_AND_PAID)){
+                        oleItemLevelBillPayment.setPaymentMode("Replacement");
+                    } else{
+                        oleItemLevelBillPayment.setPaymentMode(OLEConstants.FORGIVE);
+                    }
                     oleItemLevelBillPayment.setNote("Note" + loanDocument.getCheckInDate());
                     List<OleItemLevelBillPayment> oleItemLevelBillPayments = CollectionUtils.isNotEmpty(olePatronfeeType.getItemLevelBillPaymentList()) ? olePatronfeeType.getItemLevelBillPaymentList() : new ArrayList<OleItemLevelBillPayment>();
                     oleItemLevelBillPayments.add(oleItemLevelBillPayment);
