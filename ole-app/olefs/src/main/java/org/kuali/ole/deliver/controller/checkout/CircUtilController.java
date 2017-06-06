@@ -60,7 +60,7 @@ public class CircUtilController extends RuleExecutor {
         map.put("circPolicyId", currentLoanDocument.getCirculationPolicyId());
         List<OleNoticeTypeConfiguration> oleNoticeTypeConfigurations =
                 (List<OleNoticeTypeConfiguration>) getBusinessObjectService().findMatching(OleNoticeTypeConfiguration.class, map);
-
+        itemRecord.setDueDateTime(currentLoanDocument.getLoanDueDate());
         OleNoticeTypeConfiguration oleNoticeTypeConfiguration = null;
         if (CollectionUtils.isNotEmpty(oleNoticeTypeConfigurations)) {
             oleNoticeTypeConfiguration = oleNoticeTypeConfigurations.get(0);
