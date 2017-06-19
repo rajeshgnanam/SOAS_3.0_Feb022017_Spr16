@@ -73,12 +73,13 @@ var dataMappingObject = {
         {id: 'type', name: 'Item Type'},
         {id: 'status', name: 'Item Status'},
         {id: 'donorCode', name: 'Donor Code'},
+        {id: 'publicNote', name: 'Public Note'},
         {id: 'enumeration', name: 'Enumeration'},
         {id: 'chronology', name: 'Chronology'},
         {id: 'vendorLineItemId', name: 'Vendor Line Item Identifier'},
         {id: 'staffOnly', name: 'Staff Only'},
         {id: 'numberOfPieces', name: 'Number of Pieces'},
-        {id: 'publicNote', name: 'Public Note'}
+        {id: 'statisticalCode', name:'Statistical Code'}
     ],
     destinationFieldsForBibMarcEHoldings :  [
         {id: 'Local Identifier', name: 'Local Identifier'},
@@ -186,7 +187,8 @@ var dataMappingObject = {
         {id: 'chronology', name: 'Chronology'},
         {id: 'vendorLineItemId', name: 'Vendor Line Item Identifier'},
         {id: 'staffOnly', name: 'Staff Only'},
-        {id: 'numberOfPieces', name: 'Number of Pieces'}
+        {id: 'numberOfPieces', name: 'Number of Pieces'},
+        {id :'statisticalCode', name:'Statistical Code'}
     ],
     destinationFieldsForConstantsEHoldings : [
         {id: 'accessStatus', name: 'Access Status'},
