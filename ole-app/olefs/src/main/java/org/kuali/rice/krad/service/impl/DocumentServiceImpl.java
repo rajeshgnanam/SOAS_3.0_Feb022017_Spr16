@@ -14,6 +14,7 @@ import org.kuali.ole.alert.document.OleTransactionalDocumentBase;
 import org.kuali.ole.alert.service.AlertGlobalConfigurationServiceImpl;
 import org.kuali.ole.alert.service.impl.AlertServiceImpl;
 import org.kuali.ole.deliver.bo.OleDeliverRequestType;
+import org.kuali.ole.select.document.OleLineItemReceivingDocument;
 import org.kuali.rice.core.api.CoreApiServiceLocator;
 import org.kuali.rice.core.api.config.ConfigurationException;
 import org.kuali.rice.core.api.config.property.ConfigurationService;
@@ -731,8 +732,10 @@ public class DocumentServiceImpl implements DocumentService {
             }
             if (document != null && document instanceof MaintenanceDocumentBase) {
                 return postProcessDocument(documentHeaderId, workflowDocument, document);
-            }
-            else {
+            } else if(document != null && document instanceof OleLineItemReceivingDocument){
+                document.processAfterRetrieve();
+                return document;
+            } else {
                 return document;
             }
         //    return postProcessDocument(documentHeaderId, workflowDocument, document);
