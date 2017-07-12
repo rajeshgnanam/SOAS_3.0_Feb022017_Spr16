@@ -86,6 +86,32 @@
                 <property name="category">Unformatted</property>
             </structure>
         </scalar-parameter>
+        <scalar-parameter name="NoteCreatedFromDate" id="61">
+            <text-property name="promptText">Note Created From Date</text-property>
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">dateTime</property>
+            <property name="distinct">true</property>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="NoteCreatedToDate" id="62">
+            <text-property name="promptText">Note Created To Date</text-property>
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">dateTime</property>
+            <property name="distinct">true</property>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
     </parameters>
     <data-sources>
         <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="Patron Notes" id="10">
@@ -113,6 +139,45 @@
     </data-sources>
     <data-sets>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="PatronNotes" id="11">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">OLE_PTRN_ID</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">OLE_PTRN_ID</text-property>
+                    <text-property name="heading">OLE_PTRN_ID</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">concat(nm.last_nm,' ',nm.first_nm)</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">concat(nm.last_nm,' ',nm.first_nm)</text-property>
+                    <text-property name="heading">concat(nm.last_nm,' ',nm.first_nm)</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">BARCODE</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">BARCODE</text-property>
+                    <text-property name="heading">BARCODE</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">DLVR_BORR_TYP_NM</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">DLVR_BORR_TYP_NM</text-property>
+                    <text-property name="heading">DLVR_BORR_TYP_NM</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">OLE_PTRN_NTE_TXT</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">OLE_PTRN_NTE_TXT</text-property>
+                    <text-property name="heading">OLE_PTRN_NTE_TXT</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">NTE_CRT_OR_UPDT_DATE</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">NTE_CRT_OR_UPDT_DATE</text-property>
+                    <text-property name="heading">NTE_CRT_OR_UPDT_DATE</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters"/>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
@@ -140,16 +205,32 @@
                         <property name="name">OLE_PTRN_NTE_TXT</property>
                         <property name="dataType">string</property>
                     </structure>
+                    <structure>
+                        <property name="position">6</property>
+                        <property name="name">NTE_CRT_OR_UPDT_DATE</property>
+                        <property name="dataType">date-time</property>
+                    </structure>
                 </list-property>
             </structure>
             <method name="beforeOpen"><![CDATA[this.queryText=this.queryText+ " and p.actv_ind = '"+ params["Active Patron"].value+"'";
 this.queryText=this.queryText+ " and nt.ole_ptrn_nte_type_cd in ('"+params["Note Type"].value.join("','")+"')";
 
 if(params["Patron Barcode"].value !=null)
-	this.queryText=this.queryText+ "and p.BARCODE = '"+ params["Patron Barcode"].value+"'";
+	this.queryText=this.queryText+ " and p.BARCODE = '"+ params["Patron Barcode"].value+"'";
 
 if(params["Note Text"].value !=null)
-	this.queryText=this.queryText+ "and n.ole_ptrn_nte_txt like '%"+ params["Note Text"].value +"%'";
+	this.queryText=this.queryText+ " and n.ole_ptrn_nte_txt like '%"+ params["Note Text"].value +"%'";
+	
+if(params["NoteCreatedFromDate"].value != null &amp;&amp; params["NoteCreatedToDate"] != null){
+	this.queryText=this.queryText+ " and n.nte_crt_or_updt_date between '"+ params["NoteCreatedFromDate"].value +"' and '"+ params["NoteCreatedToDate"].value + "'";
+}else if(params["NoteCreatedFromDate"].value != null &amp;&amp; params["NoteCreatedToDate"] == null){
+	this.queryText=this.queryText+ " and n.nte_crt_or_updt_date >= '"+ params["NoteCreatedFromDate"].value +"'";	
+}else if(params["NoteCreatedFromDate"].value == null &amp;&amp; params["NoteCreatedToDate"] != null){
+	this.queryText=this.queryText+ " and n.nte_crt_or_updt_date <= '"+ params["NoteCreatedToDate"].value +"'";	
+}else{
+	this.queryText=this.queryText + "";
+}
+
 	
 ]]></method>
             <property name="dataSource">Patron Notes</property>
@@ -159,30 +240,42 @@ if(params["Note Text"].value !=null)
                     <property name="name">OLE_PTRN_ID</property>
                     <property name="nativeName">OLE_PTRN_ID</property>
                     <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">concat(nm.last_nm,' ',nm.first_nm)</property>
                     <property name="nativeName">concat(nm.last_nm,' ',nm.first_nm)</property>
                     <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">BARCODE</property>
                     <property name="nativeName">BARCODE</property>
                     <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">DLVR_BORR_TYP_NM</property>
                     <property name="nativeName">DLVR_BORR_TYP_NM</property>
                     <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">OLE_PTRN_NTE_TXT</property>
                     <property name="nativeName">OLE_PTRN_NTE_TXT</property>
                     <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">6</property>
+                    <property name="name">NTE_CRT_OR_UPDT_DATE</property>
+                    <property name="nativeName">NTE_CRT_OR_UPDT_DATE</property>
+                    <property name="dataType">date-time</property>
+                    <property name="nativeDataType">93</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -190,7 +283,8 @@ if(params["Note Text"].value !=null)
     concat(nm.last_nm,' ',nm.first_nm),
     p.BARCODE,
     b.DLVR_BORR_TYP_NM,
-    n.OLE_PTRN_NTE_TXT
+    n.OLE_PTRN_NTE_TXT,
+    n.NTE_CRT_OR_UPDT_DATE
 from 
     ole_ptrn_nte_t n,
     ole_ptrn_nte_typ_t nt,
@@ -455,6 +549,13 @@ from
                     <property name="dataType">string</property>
                     <property name="allowExport">true</property>
                 </structure>
+                <structure>
+                    <property name="name">NoteCreatedDate</property>
+                    <text-property name="displayName">Note Created Date</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["NTE_CRT_OR_UPDT_DATE"]</expression>
+                    <property name="dataType">date-time</property>
+                    <property name="allowExport">true</property>
+                </structure>
             </list-property>
             <column id="36">
                 <property name="style">NewStyle1</property>
@@ -469,6 +570,9 @@ from
                 <property name="style">NewStyle4</property>
             </column>
             <column id="40">
+                <property name="style">NewStyle5</property>
+            </column>
+            <column id="65">
                 <property name="style">NewStyle5</property>
             </column>
             <header>
@@ -496,6 +600,11 @@ from
                     <cell id="23">
                         <label id="48">
                             <text-property name="text">Notes</text-property>
+                        </label>
+                    </cell>
+                    <cell id="63">
+                        <label id="66">
+                            <text-property name="text">Note Created/Updated Date</text-property>
                         </label>
                     </cell>
                 </row>
@@ -527,8 +636,14 @@ from
                             <property name="resultSetColumn">PatronNotes</property>
                         </data>
                     </cell>
+                    <cell id="64">
+                        <data id="67">
+                            <property name="resultSetColumn">NoteCreatedDate</property>
+                        </data>
+                    </cell>
                 </row>
             </detail>
         </table>
     </body>
 </report>
+
