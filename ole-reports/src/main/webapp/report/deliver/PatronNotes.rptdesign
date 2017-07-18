@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
     <property name="createdBy">Eclipse BIRT Designer Version 4.4.1.v201408290142 Build &lt;4.4.1.v20140916-1320></property>
+    <list-property name="propertyBindings">
+        <structure>
+            <property name="name">queryText</property>
+            <property name="id">11</property>
+        </structure>
+        <structure>
+            <property name="name">queryTimeOut</property>
+            <property name="id">11</property>
+        </structure>
+        <structure>
+            <property name="name">rowFetchSize</property>
+            <property name="id">11</property>
+        </structure>
+    </list-property>
     <property name="units">in</property>
     <property name="iconFile">/templates/blank_report.gif</property>
     <property name="layoutPreference">auto layout</property>
@@ -39,11 +53,12 @@
             <property name="dataType">string</property>
             <property name="distinct">true</property>
             <simple-property-list name="defaultValue">
+                <value type="constant">SIP</value>
                 <value type="constant">USER</value>
                 <value type="constant">STAFF</value>
-                <value type="constant">GENERAL</value>
                 <value type="constant">CHECKIN</value>
                 <value type="constant">BLOCK</value>
+                <value type="constant">GENERAL</value>
             </simple-property-list>
             <list-property name="selectionList"/>
             <property name="paramType">multi-value</property>
@@ -90,7 +105,7 @@
             <text-property name="promptText">Note Created From Date</text-property>
             <property name="valueType">static</property>
             <property name="isRequired">false</property>
-            <property name="dataType">dateTime</property>
+            <property name="dataType">date</property>
             <property name="distinct">true</property>
             <list-property name="selectionList"/>
             <property name="paramType">simple</property>
@@ -103,7 +118,7 @@
             <text-property name="promptText">Note Created To Date</text-property>
             <property name="valueType">static</property>
             <property name="isRequired">false</property>
-            <property name="dataType">dateTime</property>
+            <property name="dataType">date</property>
             <property name="distinct">true</property>
             <list-property name="selectionList"/>
             <property name="paramType">simple</property>
@@ -139,6 +154,7 @@
     </data-sources>
     <data-sets>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="PatronNotes" id="11">
+            <property name="nullsOrdering">nulls lowest</property>
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">OLE_PTRN_ID</property>
@@ -221,15 +237,17 @@ if(params["Patron Barcode"].value !=null)
 if(params["Note Text"].value !=null)
 	this.queryText=this.queryText+ " and n.ole_ptrn_nte_txt like '%"+ params["Note Text"].value +"%'";
 	
-if(params["NoteCreatedFromDate"].value != null &amp;&amp; params["NoteCreatedToDate"] != null){
+if(params["NoteCreatedFromDate"].value != null &amp;&amp; params["NoteCreatedToDate"].value != null){
 	this.queryText=this.queryText+ " and n.nte_crt_or_updt_date between '"+ params["NoteCreatedFromDate"].value +"' and '"+ params["NoteCreatedToDate"].value + "'";
-}else if(params["NoteCreatedFromDate"].value != null &amp;&amp; params["NoteCreatedToDate"] == null){
-	this.queryText=this.queryText+ " and n.nte_crt_or_updt_date >= '"+ params["NoteCreatedFromDate"].value +"'";	
-}else if(params["NoteCreatedFromDate"].value == null &amp;&amp; params["NoteCreatedToDate"] != null){
+}else if(params["NoteCreatedFromDate"].value != null &amp;&amp; params["NoteCreatedToDate"].value == null){
+	this.queryText=this.queryText+ " and n.nte_crt_or_updt_date between '"+ params["NoteCreatedFromDate"].value +"' and now()";
+}else if(params["NoteCreatedFromDate"].value == null &amp;&amp; params["NoteCreatedToDate"].value != null){
 	this.queryText=this.queryText+ " and n.nte_crt_or_updt_date <= '"+ params["NoteCreatedToDate"].value +"'";	
 }else{
 	this.queryText=this.queryText + "";
 }
+
+this.queryText = this.queryText + "order by n.nte_crt_or_updt_date asc";
 
 	
 ]]></method>
@@ -310,6 +328,7 @@ where
                     <text-property name="heading">ole_ptrn_nte_type_cd</text-property>
                 </structure>
             </list-property>
+            <list-property name="parameters"/>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
@@ -332,7 +351,10 @@ where
             <xml-property name="queryText"><![CDATA[select 
 	ole_ptrn_nte_type_cd
 from 
-	ole_ptrn_nte_typ_t]]></xml-property>
+	ole_ptrn_nte_typ_t
+order by
+	ole_ptrn_nte_typ_id
+desc]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
   <Version>2.0</Version>
@@ -646,4 +668,3 @@ from
         </table>
     </body>
 </report>
-
