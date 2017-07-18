@@ -1020,6 +1020,7 @@ public class OlePatronConverterService {
                         olePatronNotes.setPatronNoteTypeId(olePatronNoteTypes.get(0).getPatronNoteTypeId());
                         olePatronNotes.setPatronNoteText(olePatronNote.getNote());
                         olePatronNotes.setActive(olePatronNote.isActive());
+                        olePatronNotes.setNoteCreatedOrUpdatedDate(new Timestamp(System.currentTimeMillis()));
                         olePatronDocument.getNotes().add(olePatronNotes);
                         notesFlag = true;
                     } else {
