@@ -1428,7 +1428,7 @@ public class RdbmsItemDocumentManager extends RdbmsHoldingsDocumentManager imple
         if (noteList.size() > 0) {
             for (int i = 0; i < noteList.size(); i++) {
                 Note note = noteList.get(i);
-                if (note.getType() != null && ("public".equalsIgnoreCase(note.getType()) || "nonPublic".equalsIgnoreCase(note.getType()))) {
+                if (note.getType() != null && ("public".equalsIgnoreCase(note.getType()) || "nonPublic".equalsIgnoreCase(note.getType()) || "acquired".equalsIgnoreCase(note.getType()))) {
                     ItemNoteRecord itemNoteRecord = new ItemNoteRecord();
                     itemNoteRecord.setType(note.getType());
                     itemNoteRecord.setNote(note.getValue());

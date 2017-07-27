@@ -458,6 +458,8 @@ public class OLEConstants {
     public static final String BIB_INSTANCE_ID = "instanceIdentifier";
     public static final String BIB_ITEM_ID = "itemIdentifier";
     public static final String NOTE_TYPE = "public";
+    public static final String NON_PUBLIC_NOTE_TYP = "nonPublic";
+    public static final String ACQUIRED_NOTE_TYP = "acquired";
     public static final String LOCATION_LOCATIONLEVEL_NAME = "location.locationLevel.name";
     public static final String LOCATION_LOCATIONLEVEL_LEVEL = "location.locationLevel.level";
     public static final String PERMANENT = "permanent";
@@ -653,6 +655,9 @@ public class OLEConstants {
         public static final String DESTINATION_FIELD_DONOR_NOTE = "Donor Note";
         public static final String DESTINATION_FIELD_DONOR_CODE = "Donor Code";
         public static final String PUBLIC_NOTE = "Public Note";
+        public static final String NON_PUBLIC_NOTE = "Non Public Note";
+        public static final String ACQUIRED_NOTE = "Acquired Note";
+        public static final String NOTE_CREATED_DATE = "Note Created Date";
         public static final String SOURCE_FIELD_DATE_CREATED = "Date Created";
         public static final String LCC = "LCC";
         public static final String LOCAL_IDENTIFIER = "Local Identifier";
