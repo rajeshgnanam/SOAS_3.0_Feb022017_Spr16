@@ -208,6 +208,12 @@
                     <text-property name="displayName">SUFFIX_NM</text-property>
                     <text-property name="heading">SUFFIX_NM</text-property>
                 </structure>
+                <structure>
+                    <property name="columnName">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</text-property>
+                    <text-property name="heading">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</text-property>
+                </structure>
             </list-property>
             <list-property name="parameters"/>
             <structure name="cachedMetaData">
@@ -289,6 +295,11 @@
                     </structure>
                     <structure>
                         <property name="position">16</property>
+                        <property name="name">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">17</property>
                         <property name="name">Library</property>
                         <property name="dataType">string</property>
                     </structure>
@@ -415,6 +426,13 @@ this.queryText = this.queryText+" and ODBT.DLVR_BORR_TYP_NM IN ('"+params["Patro
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
+                <structure>
+                    <property name="position">16</property>
+                    <property name="name">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</property>
+                    <property name="nativeName">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
 OPEV.FIRST_NM,
@@ -437,7 +455,8 @@ CASE WHEN ODI.LOCATION_LEVEL IS NOT NULL AND ODI.LOCATION_LEVEL != ' ' THEN ODI.
 END as "Location Level",
 ODBI.TITLE,
 OPEV.PREFIX_NM,
-OPEV.SUFFIX_NM
+OPEV.SUFFIX_NM,
+(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)
 from
 OLE_DLVR_PTRN_BILL_FEE_TYP_T ODPBFT,
 OLE_DLVR_PTRN_BILL_T ODPB,
@@ -606,6 +625,12 @@ OLE_DLVR_BORR_TYP_T ODBT]]></xml-property>
                     <text-property name="displayName">SUFFIX_NM</text-property>
                     <text-property name="heading">SUFFIX_NM</text-property>
                 </structure>
+                <structure>
+                    <property name="columnName">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</text-property>
+                    <text-property name="heading">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</text-property>
+                </structure>
             </list-property>
             <list-property name="parameters"/>
             <structure name="cachedMetaData">
@@ -663,6 +688,11 @@ OLE_DLVR_BORR_TYP_T ODBT]]></xml-property>
                     <structure>
                         <property name="position">11</property>
                         <property name="name">SUFFIX_NM</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">12</property>
+                        <property name="name">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</property>
                         <property name="dataType">string</property>
                     </structure>
                 </list-property>
@@ -757,6 +787,13 @@ this.queryText = this.queryText+" and ODBT.DLVR_BORR_TYP_NM IN ('"+params["Patro
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
+                <structure>
+                    <property name="position">12</property>
+                    <property name="name">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</property>
+                    <property name="nativeName">(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
 OPEV.FIRST_NM,
@@ -769,7 +806,8 @@ ODPBFT.PAY_GENERAL_NOTE,
 ODPBFT.BALANCE_AMT,
 OPT.EXPIRATION_DATE,
 OPEV.PREFIX_NM,
-OPEV.SUFFIX_NM
+OPEV.SUFFIX_NM,
+(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)
 from
 OLE_DLVR_PTRN_BILL_FEE_TYP_T ODPBFT,
 OLE_DLVR_PTRN_BILL_T ODPB,
@@ -1112,6 +1150,13 @@ OPT.OLE_PTRN_ID = OPEV.OLE_PTRN_ID
                     <property name="dataType">string</property>
                     <property name="allowExport">true</property>
                 </structure>
+                <structure>
+                    <property name="name">Pcode 3</property>
+                    <text-property name="displayName">Pcode 3</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
             </list-property>
             <structure name="toc"/>
             <column id="42"/>
@@ -1120,6 +1165,9 @@ OPT.OLE_PTRN_ID = OPEV.OLE_PTRN_ID
                 <property name="width">0.20833333333333334in</property>
             </column>
             <column id="206">
+                <property name="width">0.20833333333333334in</property>
+            </column>
+            <column id="223">
                 <property name="width">0.20833333333333334in</property>
             </column>
             <column id="176">
@@ -1188,6 +1236,19 @@ OPT.OLE_PTRN_ID = OPEV.OLE_PTRN_ID
                         <property name="borderTopWidth">thin</property>
                         <label id="214">
                             <text-property name="text">Pcode2</text-property>
+                        </label>
+                    </cell>
+                    <cell id="221">
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="224">
+                            <text-property name="text">Pcode3</text-property>
                         </label>
                     </cell>
                     <cell id="174">
@@ -1374,6 +1435,19 @@ OPT.OLE_PTRN_ID = OPEV.OLE_PTRN_ID
                         <property name="borderTopWidth">thin</property>
                         <data id="218">
                             <property name="resultSetColumn">EMPcode2</property>
+                        </data>
+                    </cell>
+                    <cell id="222">
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <data id="225">
+                            <property name="resultSetColumn">Pcode 3</property>
                         </data>
                     </cell>
                     <cell id="175">
@@ -1635,6 +1709,13 @@ OPT.OLE_PTRN_ID = OPEV.OLE_PTRN_ID
                     <property name="dataType">string</property>
                     <property name="allowExport">true</property>
                 </structure>
+                <structure>
+                    <property name="name">Pcode3</property>
+                    <text-property name="displayName">Pcode3</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["(SELECT OLE_DLVR_STAT_CAT_NM FROM OLE_DLVR_STAT_CAT_T WHERE OLE_DLVR_STAT_CAT_ID = OPT.OLE_STAT_CAT)"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
             </list-property>
             <column id="188">
                 <property name="style">NewStyle</property>
@@ -1646,6 +1727,9 @@ OPT.OLE_PTRN_ID = OPEV.OLE_PTRN_ID
                 <property name="style">NewStyle</property>
             </column>
             <column id="209">
+                <property name="style">NewStyle</property>
+            </column>
+            <column id="228">
                 <property name="style">NewStyle</property>
             </column>
             <column id="191">
@@ -1690,6 +1774,11 @@ OPT.OLE_PTRN_ID = OPEV.OLE_PTRN_ID
                     <cell id="207">
                         <label id="216">
                             <text-property name="text">Pcode2</text-property>
+                        </label>
+                    </cell>
+                    <cell id="226">
+                        <label id="229">
+                            <text-property name="text">Pcode 3</text-property>
                         </label>
                     </cell>
                     <cell id="189">
@@ -1751,6 +1840,11 @@ OPT.OLE_PTRN_ID = OPEV.OLE_PTRN_ID
                             <property name="resultSetColumn">Cpcode2</property>
                         </data>
                     </cell>
+                    <cell id="227">
+                        <data id="230">
+                            <property name="resultSetColumn">Pcode3</property>
+                        </data>
+                    </cell>
                     <cell id="190">
                         <data id="200">
                             <property name="resultSetColumn">Stud Id</property>
@@ -1791,3 +1885,4 @@ OPT.OLE_PTRN_ID = OPEV.OLE_PTRN_ID
         </table>
     </body>
 </report>
+
