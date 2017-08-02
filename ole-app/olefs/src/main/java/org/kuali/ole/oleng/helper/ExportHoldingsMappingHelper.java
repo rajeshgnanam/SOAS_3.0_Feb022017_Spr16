@@ -1392,9 +1392,9 @@ public class ExportHoldingsMappingHelper {
         if(!CollectionUtils.isEmpty(dataFieldsItemNoteMap)){
             DataField dataField;
             if(note != null){
-                if(dataFieldsItemNoteMap.containsValue(OLEConstants.OLEBatchProcess.NOTE_CREATED_DATE)){
+                if(dataFieldsItemNoteMap.containsValue(OLEConstants.OLEBatchProcess.ACQUIRED_NOTE_DATE)){
                     for(Map.Entry<String,String> mapEntry : dataFieldsItemNoteMap.entrySet()){
-                        if(mapEntry.getValue().equalsIgnoreCase(OLEConstants.OLEBatchProcess.NOTE_CREATED_DATE)){
+                        if(mapEntry.getValue().equalsIgnoreCase(OLEConstants.OLEBatchProcess.ACQUIRED_NOTE_DATE)){
                             dataField = checkDataField(dataFieldItemList, StringUtils.trim(mapEntry.getKey()).substring(0, 3));
                             if (dataField == null) {
                                 dataField = getDataField(mapEntry);
