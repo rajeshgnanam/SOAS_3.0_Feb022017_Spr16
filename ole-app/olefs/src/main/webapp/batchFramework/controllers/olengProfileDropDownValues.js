@@ -76,7 +76,7 @@ var dataMappingObject = {
         {id: 'publicNote', name: 'Public Note'},
         {id: 'nonPublicNote', name: 'Non Public Note'},
         {id: 'acquiredNote', name: 'Acquired Note'},
-        {id: 'noteCreatedDate', name: 'Note Created Date'},
+        {id: 'acquiredNoteDate', name: 'Acquired Note Date'},
         {id: 'enumeration', name: 'Enumeration'},
         {id: 'chronology', name: 'Chronology'},
         {id: 'vendorLineItemId', name: 'Vendor Line Item Identifier'},

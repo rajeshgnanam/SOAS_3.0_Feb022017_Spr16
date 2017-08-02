@@ -61,7 +61,7 @@ public class ExportHoldingsMappingHelper {
                     } else if(mappingOptionsBo.getField().equalsIgnoreCase(OLEConstants.OLEBatchProcess.PUBLIC_NOTE)
                             || mappingOptionsBo.getField().equalsIgnoreCase(OLEConstants.OLEBatchProcess.ACQUIRED_NOTE)
                             || mappingOptionsBo.getField().equalsIgnoreCase(OLEConstants.OLEBatchProcess.NON_PUBLIC_NOTE)
-                            || mappingOptionsBo.getField().equalsIgnoreCase(OLEConstants.OLEBatchProcess.NOTE_CREATED_DATE)){
+                            || mappingOptionsBo.getField().equalsIgnoreCase(OLEConstants.OLEBatchProcess.ACQUIRED_NOTE_DATE)){
                         dataFieldsItemNoteMap.put(key, mappingOptionsBo.getField());
                     } else{
                         dataFieldsItemsMap.put(key, mappingOptionsBo.getField());

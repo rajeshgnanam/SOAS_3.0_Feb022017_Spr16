@@ -657,7 +657,7 @@ public class OLEConstants {
         public static final String PUBLIC_NOTE = "Public Note";
         public static final String NON_PUBLIC_NOTE = "Non Public Note";
         public static final String ACQUIRED_NOTE = "Acquired Note";
-        public static final String NOTE_CREATED_DATE = "Note Created Date";
+        public static final String ACQUIRED_NOTE_DATE = "Acquired Note Date";
         public static final String SOURCE_FIELD_DATE_CREATED = "Date Created";
         public static final String LCC = "LCC";
         public static final String LOCAL_IDENTIFIER = "Local Identifier";
