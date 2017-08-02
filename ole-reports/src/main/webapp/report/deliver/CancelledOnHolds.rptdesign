@@ -69,36 +69,6 @@
                     <text-property name="displayName">ITEM_AVAIL_STAT_CD</text-property>
                     <text-property name="heading">ITEM_AVAIL_STAT_CD</text-property>
                 </structure>
-                <structure>
-                    <property name="columnName">OLE_PTRN_ID</property>
-                    <property name="analysis">dimension</property>
-                    <text-property name="displayName">OLE_PTRN_ID</text-property>
-                    <text-property name="heading">OLE_PTRN_ID</text-property>
-                </structure>
-                <structure>
-                    <property name="columnName">CONCAT(N.LAST_NM,' ',FIRST_NM)</property>
-                    <property name="analysis">dimension</property>
-                    <text-property name="displayName">CONCAT(N.LAST_NM,' ',FIRST_NM)</text-property>
-                    <text-property name="heading">CONCAT(N.LAST_NM,' ',FIRST_NM)</text-property>
-                </structure>
-                <structure>
-                    <property name="columnName">CRTE_DT_TIME</property>
-                    <property name="analysis">dimension</property>
-                    <text-property name="displayName">CRTE_DT_TIME</text-property>
-                    <text-property name="heading">CRTE_DT_TIME</text-property>
-                </structure>
-                <structure>
-                    <property name="columnName">OLE_RQST_ID</property>
-                    <property name="analysis">dimension</property>
-                    <text-property name="displayName">OLE_RQST_ID</text-property>
-                    <text-property name="heading">OLE_RQST_ID</text-property>
-                </structure>
-                <structure>
-                    <property name="columnName">OLE_LOAN_ID</property>
-                    <property name="analysis">dimension</property>
-                    <text-property name="displayName">OLE_LOAN_ID</text-property>
-                    <text-property name="heading">OLE_LOAN_ID</text-property>
-                </structure>
             </list-property>
             <list-property name="parameters"/>
             <structure name="cachedMetaData">
@@ -131,31 +101,6 @@
                     <structure>
                         <property name="position">6</property>
                         <property name="name">ITEM_AVAIL_STAT_CD</property>
-                        <property name="dataType">string</property>
-                    </structure>
-                    <structure>
-                        <property name="position">7</property>
-                        <property name="name">OLE_PTRN_ID</property>
-                        <property name="dataType">string</property>
-                    </structure>
-                    <structure>
-                        <property name="position">8</property>
-                        <property name="name">CONCAT(N.LAST_NM,' ',FIRST_NM)</property>
-                        <property name="dataType">string</property>
-                    </structure>
-                    <structure>
-                        <property name="position">9</property>
-                        <property name="name">CRTE_DT_TIME</property>
-                        <property name="dataType">date-time</property>
-                    </structure>
-                    <structure>
-                        <property name="position">10</property>
-                        <property name="name">OLE_RQST_ID</property>
-                        <property name="dataType">string</property>
-                    </structure>
-                    <structure>
-                        <property name="position">11</property>
-                        <property name="name">OLE_LOAN_ID</property>
                         <property name="dataType">string</property>
                     </structure>
                 </list-property>
@@ -204,41 +149,6 @@
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
-                <structure>
-                    <property name="position">7</property>
-                    <property name="name">OLE_PTRN_ID</property>
-                    <property name="nativeName">OLE_PTRN_ID</property>
-                    <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
-                </structure>
-                <structure>
-                    <property name="position">8</property>
-                    <property name="name">CONCAT(N.LAST_NM,' ',FIRST_NM)</property>
-                    <property name="nativeName">CONCAT(N.LAST_NM,' ',FIRST_NM)</property>
-                    <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
-                </structure>
-                <structure>
-                    <property name="position">9</property>
-                    <property name="name">CRTE_DT_TIME</property>
-                    <property name="nativeName">CRTE_DT_TIME</property>
-                    <property name="dataType">date-time</property>
-                    <property name="nativeDataType">93</property>
-                </structure>
-                <structure>
-                    <property name="position">10</property>
-                    <property name="name">OLE_RQST_ID</property>
-                    <property name="nativeName">OLE_RQST_ID</property>
-                    <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
-                </structure>
-                <structure>
-                    <property name="position">11</property>
-                    <property name="name">OLE_LOAN_ID</property>
-                    <property name="nativeName">OLE_LOAN_ID</property>
-                    <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
-                </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[SELECT 
 	I.BARCODE,
@@ -246,36 +156,28 @@
 	B.AUTHOR,
 	I.CALL_NUMBER,
 	I.CALL_NUMBER_PREFIX,
-	ST.ITEM_AVAIL_STAT_CD,
-    P.OLE_PTRN_ID,
-    CONCAT(N.LAST_NM,' ',FIRST_NM),
-    R.CRTE_DT_TIME,
-    R.OLE_RQST_ID,
-    R.OLE_LOAN_ID
+	ST.ITEM_AVAIL_STAT_CD 
 FROM 
-    OLE_DLVR_RQST_HSTRY_REC_T R,
 	OLE_DS_ITEM_T I,
 	OLE_DS_HOLDINGS_T H,
 	OLE_DS_BIB_INFO_T B,
-	OLE_DLVR_ITEM_AVAIL_STAT_T ST,
-    OLE_PTRN_T P,
-    KRIM_ENTITY_NM_T N
+	OLE_DLVR_ITEM_AVAIL_STAT_T ST
 WHERE
-    I.BARCODE = R.OLE_ITEM_ID
+H.HOLDINGS_ID=I.HOLDINGS_ID
 AND
-    H.HOLDINGS_ID = I.HOLDINGS_ID
+B.BIB_ID=H.BIB_ID
 AND
-    B.BIB_ID = H.BIB_ID
+ST.ITEM_AVAIL_STAT_ID=I.ITEM_STATUS_ID
 AND
-    ST.ITEM_AVAIL_STAT_ID = I.ITEM_STATUS_ID
+I.ITEM_STATUS_ID='22'
 AND
-    P.OLE_PTRN_ID = R.OLE_PTRN_ID
-AND
-    N.ENTITY_ID = P.OLE_PTRN_ID
-AND
-    I.ITEM_STATUS_ID = '22'
-AND
-    R.OLE_REQ_OUTCOME_STATUS='Cancelled Request']]></xml-property>
+I.BARCODE
+NOT IN (
+		SELECT 
+			R.ITM_ID
+		FROM
+			OLE_DLVR_RQST_T R
+)]]></xml-property>
         </oda-data-set>
     </data-sets>
     <styles>
@@ -395,41 +297,6 @@ AND
                     <property name="dataType">string</property>
                     <property name="allowExport">true</property>
                 </structure>
-                <structure>
-                    <property name="name">OlePatronId</property>
-                    <text-property name="displayName">OlePatronId</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["OLE_PTRN_ID"]</expression>
-                    <property name="dataType">string</property>
-                    <property name="allowExport">true</property>
-                </structure>
-                <structure>
-                    <property name="name">OlePatronName</property>
-                    <text-property name="displayName">OlePatronName</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["CONCAT(N.LAST_NM,' ',FIRST_NM)"]</expression>
-                    <property name="dataType">string</property>
-                    <property name="allowExport">true</property>
-                </structure>
-                <structure>
-                    <property name="name">RequestCancelledDt</property>
-                    <text-property name="displayName">RequestCancelledDt</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["CRTE_DT_TIME"]</expression>
-                    <property name="dataType">date-time</property>
-                    <property name="allowExport">true</property>
-                </structure>
-                <structure>
-                    <property name="name">OleRequestId</property>
-                    <text-property name="displayName">OleRequestId</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["OLE_RQST_ID"]</expression>
-                    <property name="dataType">string</property>
-                    <property name="allowExport">true</property>
-                </structure>
-                <structure>
-                    <property name="name">OleLoanId</property>
-                    <text-property name="displayName">OleLoanId</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["OLE_LOAN_ID"]</expression>
-                    <property name="dataType">string</property>
-                    <property name="allowExport">true</property>
-                </structure>
             </list-property>
             <column id="40"/>
             <column id="41"/>
@@ -437,11 +304,6 @@ AND
             <column id="43"/>
             <column id="44"/>
             <column id="45"/>
-            <column id="76"/>
-            <column id="73"/>
-            <column id="70"/>
-            <column id="67"/>
-            <column id="64"/>
             <header>
                 <row id="12">
                     <cell id="13">
@@ -478,36 +340,6 @@ AND
                         <property name="style">NewStyle</property>
                         <label id="51">
                             <text-property name="text">Item Status</text-property>
-                        </label>
-                    </cell>
-                    <cell id="74">
-                        <property name="style">NewStyle</property>
-                        <label id="77">
-                            <text-property name="text">Patron Id</text-property>
-                        </label>
-                    </cell>
-                    <cell id="71">
-                        <property name="style">NewStyle</property>
-                        <label id="78">
-                            <text-property name="text">Patron Name</text-property>
-                        </label>
-                    </cell>
-                    <cell id="68">
-                        <property name="style">NewStyle</property>
-                        <label id="79">
-                            <text-property name="text">Request Cancelled Date</text-property>
-                        </label>
-                    </cell>
-                    <cell id="65">
-                        <property name="style">NewStyle</property>
-                        <label id="80">
-                            <text-property name="text">Request Id</text-property>
-                        </label>
-                    </cell>
-                    <cell id="62">
-                        <property name="style">NewStyle</property>
-                        <label id="81">
-                            <text-property name="text">Loan Id</text-property>
                         </label>
                     </cell>
                 </row>
@@ -548,36 +380,6 @@ AND
                         <property name="style">NewStyle</property>
                         <data id="59">
                             <property name="resultSetColumn">Item Status</property>
-                        </data>
-                    </cell>
-                    <cell id="75">
-                        <property name="style">NewStyle</property>
-                        <data id="82">
-                            <property name="resultSetColumn">OlePatronId</property>
-                        </data>
-                    </cell>
-                    <cell id="72">
-                        <property name="style">NewStyle</property>
-                        <data id="83">
-                            <property name="resultSetColumn">OlePatronName</property>
-                        </data>
-                    </cell>
-                    <cell id="69">
-                        <property name="style">NewStyle</property>
-                        <data id="84">
-                            <property name="resultSetColumn">RequestCancelledDt</property>
-                        </data>
-                    </cell>
-                    <cell id="66">
-                        <property name="style">NewStyle</property>
-                        <data id="85">
-                            <property name="resultSetColumn">OleRequestId</property>
-                        </data>
-                    </cell>
-                    <cell id="63">
-                        <property name="style">NewStyle</property>
-                        <data id="86">
-                            <property name="resultSetColumn">OleLoanId</property>
                         </data>
                     </cell>
                 </row>
