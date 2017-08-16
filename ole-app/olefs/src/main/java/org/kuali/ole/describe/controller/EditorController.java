@@ -29,6 +29,7 @@ import org.kuali.ole.describe.form.WorkEInstanceOlemlForm;
 import org.kuali.ole.describe.form.WorkInstanceOlemlForm;
 import org.kuali.ole.describe.service.DiscoveryHelperService;
 import org.kuali.ole.docstore.common.client.DocstoreClientLocator;
+import org.kuali.ole.docstore.common.constants.DocstoreConstants;
 import org.kuali.ole.docstore.common.document.Bib;
 import org.kuali.ole.docstore.common.document.BibTree;
 import org.kuali.ole.docstore.common.document.config.DocFieldConfig;
@@ -454,6 +455,14 @@ public class EditorController extends UifControllerBase {
                     OlePatronDocument olePatronDocument = KRADServiceLocator.getBusinessObjectService().findBySinglePrimaryKey(OlePatronDocument.class, item.getLastBorrower());
                     ((WorkInstanceOlemlForm) documentForm).setLastBarcode(olePatronDocument.getBarcode());
                 }
+                if(item.getAccessInformation()!=null && item.getAccessInformation().getBarcode().isEmpty()){
+                    List<Note> noteList = item.getNote();
+                    Note note = new Note();
+                    note.setType("acquired");
+                    note.setValue(DocstoreConstants.DOCSTORE_DATE_FORMAT.format(new Date()));
+                    noteList.add(note);
+                    item.setNote(noteList);
+                }
                 setClaimsAndDamagedPatronBarcode(item);
                 setMissingPieceItemRecord(item);
             }
@@ -787,6 +796,23 @@ public class EditorController extends UifControllerBase {
                     EditorForm documentForm = documentEditor.saveDocument((EditorForm) form);
                     if (documentForm instanceof WorkInstanceOlemlForm) {
                         Item item = ((WorkInstanceOlemlForm) documentForm).getSelectedItem();
+                        String barcode = item.getAccessInformation().getBarcode();
+                        String date = DocstoreConstants.DOCSTORE_DATE_FORMAT.format(new Date());
+                        List<Note> noteList = item.getNote();
+                        List<Note> notes = new ArrayList<>();
+                        if(noteList.size()>0) {
+                            for (Note note : noteList) {
+                                if (note.getType().equalsIgnoreCase("acquired") && note.getValue().startsWith(date.substring(0, 10)) && barcode.isEmpty()) {
+                                    //do nothing.
+                                } else {
+                                    notes.add(note);
+                                }
+                            }
+                            item.setNote(notes);
+                            ((WorkInstanceOlemlForm) documentForm).setSelectedItem(item);
+                            ((EditorForm) form).setDocumentForm(documentForm);
+                        }
+                        documentForm = documentEditor.saveDocument((EditorForm) form);
                         setClaimsAndDamagedPatronBarcode(item);
                         setMissingPieceItemRecord(item);
                     }
