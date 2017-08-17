@@ -1249,11 +1249,11 @@ public class WorkItemOlemlEditor extends AbstractEditor {
         }
         String location = "";
         String holdingsLocation = "";
-        if (item.getLocation() != null) {
+        if (item.getLocation() != null  && item.getLocation().getLocationLevel()!=null) {
             location = item.getLocation().getLocationLevel().getName();
         }
         OleHoldings holdings = workInstanceOlemlForm.getSelectedHolding();
-        if (holdings.getLocation() != null) {
+        if (holdings.getLocation() != null && holdings.getLocation().getLocationLevel()!=null) {
             holdingsLocation = holdings.getLocation().getLocationLevel().getName();
         }
 

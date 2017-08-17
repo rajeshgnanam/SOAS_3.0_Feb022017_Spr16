@@ -455,7 +455,7 @@ public class EditorController extends UifControllerBase {
                     OlePatronDocument olePatronDocument = KRADServiceLocator.getBusinessObjectService().findBySinglePrimaryKey(OlePatronDocument.class, item.getLastBorrower());
                     ((WorkInstanceOlemlForm) documentForm).setLastBarcode(olePatronDocument.getBarcode());
                 }
-                if(item.getAccessInformation()!=null && item.getAccessInformation().getBarcode().isEmpty()){
+                if(item.getAccessInformation()!=null && StringUtils.isEmpty(item.getAccessInformation().getBarcode())){
                     List<Note> noteList = item.getNote();
                     Note note = new Note();
                     note.setType("acquired");
@@ -796,23 +796,25 @@ public class EditorController extends UifControllerBase {
                     EditorForm documentForm = documentEditor.saveDocument((EditorForm) form);
                     if (documentForm instanceof WorkInstanceOlemlForm) {
                         Item item = ((WorkInstanceOlemlForm) documentForm).getSelectedItem();
-                        String barcode = item.getAccessInformation().getBarcode();
-                        String date = DocstoreConstants.DOCSTORE_DATE_FORMAT.format(new Date());
-                        List<Note> noteList = item.getNote();
-                        List<Note> notes = new ArrayList<>();
-                        if(noteList.size()>0) {
-                            for (Note note : noteList) {
-                                if (note.getType().equalsIgnoreCase("acquired") && note.getValue().startsWith(date.substring(0, 10)) && barcode.isEmpty()) {
-                                    //do nothing.
-                                } else {
-                                    notes.add(note);
+                        if(item!=null && item.getAccessInformation()!=null) {
+                            String barcode = item.getAccessInformation().getBarcode();
+                            String date = DocstoreConstants.DOCSTORE_DATE_FORMAT.format(new Date());
+                            List<Note> noteList = item.getNote();
+                            List<Note> notes = new ArrayList<>();
+                            if (noteList.size() > 0) {
+                                for (Note note : noteList) {
+                                    if (note.getType().equalsIgnoreCase("acquired") && note.getValue().startsWith(date.substring(0, 10)) && barcode.isEmpty()) {
+                                        //do nothing.
+                                    } else {
+                                        notes.add(note);
+                                    }
                                 }
+                                item.setNote(notes);
+                                ((WorkInstanceOlemlForm) documentForm).setSelectedItem(item);
+                                ((EditorForm) form).setDocumentForm(documentForm);
                             }
-                            item.setNote(notes);
-                            ((WorkInstanceOlemlForm) documentForm).setSelectedItem(item);
-                            ((EditorForm) form).setDocumentForm(documentForm);
+                            documentForm = documentEditor.saveDocument((EditorForm) form);
                         }
-                        documentForm = documentEditor.saveDocument((EditorForm) form);
                         setClaimsAndDamagedPatronBarcode(item);
                         setMissingPieceItemRecord(item);
                     }
