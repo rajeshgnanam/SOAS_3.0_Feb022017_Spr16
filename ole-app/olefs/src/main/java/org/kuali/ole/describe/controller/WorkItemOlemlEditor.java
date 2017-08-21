@@ -633,7 +633,7 @@ public class WorkItemOlemlEditor extends AbstractEditor {
                         }
                     } else if (workInstanceOlemlForm.getSelectedHolding().getLocation() != null) {
                         OleHoldings oleHoldings = workInstanceOlemlForm.getSelectedHolding();
-                        String location = oleHoldings.getLocation().getLocationLevel().getName();
+                        String location = (oleHoldings.getLocation().getLocationLevel() != null ? oleHoldings.getLocation().getLocationLevel().getName() : null);
                         if (asrHelperService.isAnASRItem(location)) {
                             Map<String, String> asrItemMap = new HashMap<String, String>();
                             asrItemMap.put("itemBarcode", itemData.getAccessInformation().getBarcode());
