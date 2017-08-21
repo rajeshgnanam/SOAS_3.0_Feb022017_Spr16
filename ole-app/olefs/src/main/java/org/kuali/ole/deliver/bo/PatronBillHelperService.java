@@ -1921,6 +1921,10 @@ public class PatronBillHelperService {
         checkinForm.setItemBarcode(feeType.getItemBarcode());
         checkinForm.setCustomDueDateMap(new Date());
         checkinForm.setSelectedCirculationDesk("1");
+        ItemRecord itemRecord = ItemInfoUtil.getInstance().getItemRecordByBarcode(checkinForm.getItemBarcode());
+        if(itemRecord!=null && itemRecord.getItemStatusRecord()!=null && !itemRecord.getItemStatusRecord().getCode().equalsIgnoreCase("LOST")) {
+            return;
+        }
         checkinItemController.getCheckinUIController(checkinForm).checkin(checkinForm);
         OleCirculationDesk oleCirculationDesk = getCircDeskLocationResolver().getOleCirculationDesk(checkinForm.getSelectedCirculationDesk());
         if(checkinForm.getDroolsExchange().getContext()!=null && checkinForm.getDroolsExchange().getContext().size()>0) {
