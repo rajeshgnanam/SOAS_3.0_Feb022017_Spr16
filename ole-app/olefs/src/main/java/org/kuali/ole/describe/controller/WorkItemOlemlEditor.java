@@ -756,7 +756,7 @@ public class WorkItemOlemlEditor extends AbstractEditor {
                 long endtime = System.currentTimeMillis();
                 editorForm.setSolrTime(String.valueOf((endtime - startTime) / 1000));
                 if (oleItem.getLocation() != null) {
-                    String location = oleItem.getLocation().getLocationLevel().getName();
+                    String location = (oleItem.getLocation().getLocationLevel() != null ? oleItem.getLocation().getLocationLevel().getName() : null);
                     if (asrHelperService.isAnASRItem(location)) {
                         Map<String, String> asrItemMap = new HashMap<String, String>();
                         asrItemMap.put("itemBarcode", oleItem.getAccessInformation().getBarcode());
@@ -786,7 +786,7 @@ public class WorkItemOlemlEditor extends AbstractEditor {
                     }
                 } else if (workInstanceOlemlForm.getSelectedHolding().getLocation() != null) {
                     OleHoldings oleHoldings = workInstanceOlemlForm.getSelectedHolding();
-                    String location = oleHoldings.getLocation().getLocationLevel().getName();
+                    String location = (oleHoldings.getLocation().getLocationLevel() != null ? oleHoldings.getLocation().getLocationLevel().getName() : null);
                     if (asrHelperService.isAnASRItem(location)) {
                         Map<String, String> asrItemMap = new HashMap<String, String>();
                         asrItemMap.put("itemBarcode", oleItem.getAccessInformation().getBarcode());

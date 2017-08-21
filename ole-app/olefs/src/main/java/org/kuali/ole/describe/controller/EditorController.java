@@ -793,9 +793,9 @@ public class EditorController extends UifControllerBase {
                         ("true") || documentEditor.isValidUpdate((EditorForm) form) && ((EditorForm) form).getAllowUpdate().equals
                         ("")) {
                     // Send the input through one (request)form and get the output through another (response) form.
-                    EditorForm documentForm = documentEditor.saveDocument((EditorForm) form);
-                    if (documentForm instanceof WorkInstanceOlemlForm) {
-                        Item item = ((WorkInstanceOlemlForm) documentForm).getSelectedItem();
+                    EditorForm documentForm ;
+                    if (((EditorForm) form).getDocumentForm() instanceof WorkInstanceOlemlForm) {
+                        Item item = ((WorkInstanceOlemlForm) ((EditorForm) form).getDocumentForm()).getSelectedItem();
                         if(item!=null && item.getAccessInformation()!=null) {
                             String barcode = item.getAccessInformation().getBarcode();
                             String date = DocstoreConstants.DOCSTORE_DATE_FORMAT.format(new Date());
@@ -810,13 +810,15 @@ public class EditorController extends UifControllerBase {
                                     }
                                 }
                                 item.setNote(notes);
-                                ((WorkInstanceOlemlForm) documentForm).setSelectedItem(item);
-                                ((EditorForm) form).setDocumentForm(documentForm);
+                                ((WorkInstanceOlemlForm) ((EditorForm) form).getDocumentForm()).setSelectedItem(item);
+
                             }
-                            documentForm = documentEditor.saveDocument((EditorForm) form);
                         }
+                        documentForm = documentEditor.saveDocument((EditorForm) form);
                         setClaimsAndDamagedPatronBarcode(item);
                         setMissingPieceItemRecord(item);
+                    }else {
+                        documentForm = documentEditor.saveDocument((EditorForm) form);
                     }
                     // Set the output (response) form containing docum ((EditorForm) form).isAllowUpdate()ent info into the current form.
                     ((EditorForm) form).setDocumentForm(documentForm);
