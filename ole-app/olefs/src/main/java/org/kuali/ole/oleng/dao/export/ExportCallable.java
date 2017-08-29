@@ -81,50 +81,41 @@ public abstract class ExportCallable implements Callable {
                         List<Record> marcRecord = null;
                         int numberOfSuccesssRecord = 0;
                         int numberOfFailureRecord = 0;
-                        boolean isStaffOnly = false;
                         while (bibResultSet.next()) {
                             try {
                                 bibIds.remove(bibResultSet.getString(1));
                                 bib = fetchBibRecord(bibResultSet);
                                 holdingsTreeList = fetchHoldingsTreeForBib(Integer.parseInt(bib.getLocalId()));
-                                if (batchProcessTxObject.getBatchProcessProfile().getExportScope().equalsIgnoreCase(OleNGConstants.INCREMENTAL_EXCEPT_STAFF_ONLY) ||
-                                        batchProcessTxObject.getBatchProcessProfile().getExportScope().equalsIgnoreCase(OleNGConstants.FULL_EXCEPT_STAFF_ONLY)) {
-                                    if (bib != null && bib.isStaffOnly()) {
-                                        isStaffOnly = true;
-                                    }
-                                }
-                                if (!isStaffOnly) {
-                                    marcRecord = batchExportHandler.getMarcRecordUtil().convertMarcXmlContentToMarcRecord(bib.getContent());
-                                    processDataMappings(bib.getId(), marcRecord.get(0), holdingsTreeList, batchProcessTxObject.getBatchProcessProfile());
-                                    processDataTransformations(bib.getId(), marcRecord.get(0), batchProcessTxObject.getBatchProcessProfile(), batchExportHandler);
-                                    numberOfSuccesssRecord++;
-                                    oleNGBatchExportResponse.addSuccessRecord(bib.getLocalId(), bib.getId(), OleNGConstants.SUCCESS);
-                                    marcRecords.addAll(marcRecord);
-                                }
+                                marcRecord = batchExportHandler.getMarcRecordUtil().convertMarcXmlContentToMarcRecord(bib.getContent());
+                                processDataMappings(bib.getId(), marcRecord.get(0), holdingsTreeList, batchProcessTxObject.getBatchProcessProfile());
+                                processDataTransformations(bib.getId(), marcRecord.get(0), batchProcessTxObject.getBatchProcessProfile(), batchExportHandler);
+                                numberOfSuccesssRecord++;
+                                oleNGBatchExportResponse.addSuccessRecord(bib.getLocalId(), bib.getId(), OleNGConstants.SUCCESS);
+                                marcRecords.addAll(marcRecord);
 
-                            if (bib.isStaffOnly()) {
-                                // For Incremental Except Staff Only
-                                oleNGBatchExportResponse.getDeletedBibIds().add(bib.getId());
+                                if (bib.isStaffOnly()) {
+                                    // For Incremental Except Staff Only
+                                    oleNGBatchExportResponse.getDeletedBibIds().add(bib.getId());
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                numberOfFailureRecord++;
+                                oleNGBatchExportResponse.addFailureRecord(bib.getLocalId(), bib.getId(), e.getMessage());
+                                batchExportHandler.addBatchExportFailureResponseToExchange(e, bib.getId(), batchProcessTxObject.getExchangeObjectForBatchExport());
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            numberOfFailureRecord++;
-                            oleNGBatchExportResponse.addFailureRecord(bib.getLocalId(), bib.getId(), e.getMessage());
-                            batchExportHandler.addBatchExportFailureResponseToExchange(e, bib.getId(), batchProcessTxObject.getExchangeObjectForBatchExport());
                         }
+                        preparedReportForUnSyncRecords(bibIds, oleNGBatchExportResponse);
+                        oleNGBatchExportResponse.addNoOfSuccessRecords(numberOfSuccesssRecord);
+                        oleNGBatchExportResponse.addNoOfFailureRecords(numberOfFailureRecord + bibIds.size());
+                        batchExportHandler.generateFileForMarcRecords(fileNumber, marcRecords, batchProcessTxObject);
+                        return oleNGBatchExportResponse;
                     }
-                    preparedReportForUnSyncRecords(bibIds, oleNGBatchExportResponse);
-                    oleNGBatchExportResponse.addNoOfSuccessRecords(numberOfSuccesssRecord);
-                    oleNGBatchExportResponse.addNoOfFailureRecords(numberOfFailureRecord + bibIds.size());
-                    batchExportHandler.generateFileForMarcRecords(fileNumber, marcRecords, batchProcessTxObject);
-                    return oleNGBatchExportResponse;
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            batchExportHandler.addBatchExportFailureResponseToExchange(ex, null, batchProcessTxObject.getExchangeObjectForBatchExport());
-        } finally {
-            this.transactionManager = null;
+                });
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                batchExportHandler.addBatchExportFailureResponseToExchange(ex, null, batchProcessTxObject.getExchangeObjectForBatchExport());
+            } finally {
+                this.transactionManager = null;
 
             }
         }else{

@@ -527,7 +527,7 @@ public class ExportHoldingsMappingHelper {
         if (!CollectionUtils.isEmpty(item.getNote())) {
             for(Note note : item.getNote()){
                 if(StringUtils.isNotEmpty(note.getType())){
-                    if(note.getType().equalsIgnoreCase(OLEConstants.NOTE_TYPE)){
+                    if(note.getType() != null && note.getType().equalsIgnoreCase(OLEConstants.NOTE_TYPE)){
                         for (Map.Entry<String, String> entry : dataFieldsItemNoteMap.entrySet()) {
                             DataField dataField;
                             if (entry.getValue().equalsIgnoreCase(OLEConstants.OLEBatchProcess.PUBLIC_NOTE)) {
