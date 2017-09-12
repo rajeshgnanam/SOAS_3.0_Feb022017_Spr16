@@ -1671,6 +1671,9 @@ public class OleDeliverRequestDocumentHelperServiceImpl {
                 onHoldNoticesExecutorService.execute(onHoldNoticesExecutor);
             }
         }
+        if(!onHoldNoticesExecutorService.isShutdown()){
+            onHoldNoticesExecutorService.shutdown();
+        }
     } 
     private void generateNoticesBasedOnNoticeType(List<OleNoticeBo> noticesList, String noticeName, String replyToEmail) throws Exception {
         OleDeliverBatchServiceImpl oleDeliverBatchService = new OleDeliverBatchServiceImpl();
