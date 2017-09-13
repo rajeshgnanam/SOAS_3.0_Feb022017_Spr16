@@ -152,7 +152,7 @@ var convertDateFormat = function (jsonObject, key) {
     var value = jsonObject[key];
     if (value != null) {
         var date = new Date(value);
-        var dateToString2 = $.datepicker.formatDate('mm-dd-yy', date);
+        var dateToString2 = $.datepicker.formatDate('mm/dd/yy', date);
         jsonObject[key] = dateToString2;
     }
     return jsonObject;
