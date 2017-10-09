@@ -154,6 +154,17 @@
                         </#if>
                     </TR>
                     <#break>
+                <#case "Item Type">
+                    <TR>
+                        <TD>${oleNoticeContentConfigurationBo.getFieldLabel("Item Type")} :</TD>
+                        <#if oleNoticeBo.itemTypeDesc ??>
+                            <TD>${oleNoticeBo.itemTypeDesc}</TD>
+                        <#else>
+                            <TD</TD>
+                        </#if>
+                    </TR>
+                    <#break>
+
             </#switch>
         </#list>
     </#if>
