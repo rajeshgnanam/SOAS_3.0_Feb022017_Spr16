@@ -1109,29 +1109,28 @@ public class CircController extends CheckoutValidationController {
     public ModelAndView applyItemLostReplace(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
                                       HttpServletRequest request, HttpServletResponse response) throws Exception {
         CircForm circForm = (CircForm) form;
+        String itemReplaceDescription = request.getParameter("itemReplaceDescription");
         List<OleLoanDocument> loanDocumentList = getSelectedLoanDocumentList(circForm);
         CheckinItemController checkinItemController = new CheckinItemController();
-        if(StringUtils.isNotBlank(request.getParameter("cancelRequest"))) {
-            circForm.setCancelRequest(request.getParameter("cancelRequest"));
-        }else{
-            circForm.setCancelRequest("false");
-        }
         if (loanDocumentList.size() > 0) {
             List<OleLoanDocument> loanDocuments = new ArrayList<>();
             for (OleLoanDocument oleLoanDocument : loanDocumentList) {
+                OleLoanDocument loanDocument = getLoanDocument(oleLoanDocument.getItemId());
                 oleLoanDocument.setItemStatus(OLEConstants.ITEM_STATUS_LOST_AND_PAID);
                 if(circForm.getCancelRequest()!=null && circForm.getCancelRequest().equalsIgnoreCase("true")){
-                    new OleDeliverRequestDocumentHelperServiceImpl().cancelPendingRequestForClaimsReturnedItem(oleLoanDocument.getItemUuid());
-                    oleLoanDocument.setDeliverNotices(null);
+                    new OleDeliverRequestDocumentHelperServiceImpl().cancelPendingRequestForClaimsReturnedItem(loanDocument.getItemUuid());
+                    loanDocument.setDeliverNotices(null);
                 }
-                loanDocuments.add(oleLoanDocument);
+                loanDocument.setItemReplaceNote(itemReplaceDescription);
+                loanDocuments.add(loanDocument);
                 CheckinForm checkinForm = new CheckinForm();
-                checkinForm.setItemBarcode(oleLoanDocument.getItemId());
+                checkinForm.setItemBarcode(loanDocument.getItemId());
                 checkinForm.setSelectedCirculationDesk(circForm.getSelectedCirculationDesk());
                 checkinForm.setCustomDueDateMap(new Date());
                 checkinItemController.getCheckinUIController(checkinForm).checkin(checkinForm);
+                loanDocument.setItemStatus(OLEConstants.ITEM_STATUS_LOST_AND_PAID);
                 checkinItemController.getCheckinUIController(checkinForm).
-                        processCheckinAfterPreValidation((ItemRecord) checkinForm.getDroolsExchange().getContext().get("itemRecord"), checkinForm,oleLoanDocument);
+                        processCheckinAfterPreValidation((ItemRecord) checkinForm.getDroolsExchange().getContext().get("itemRecord"), checkinForm,loanDocument);
             }
             for(OleLoanDocument loanDocument : loanDocumentList) {
                         Map map = new HashMap();
@@ -1168,6 +1167,19 @@ public class CircController extends CheckoutValidationController {
         return getUIFModelAndView(circForm);
     }
 
+
+    @RequestMapping(params = "methodToCall=showItemLostReplace")
+    public ModelAndView showItemLostReplace(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
+                                                                 HttpServletRequest request, HttpServletResponse response) throws Exception {
+        CircForm circForm = (CircForm) form;
+        if(StringUtils.isNotBlank(request.getParameter("cancelRequest"))) {
+            circForm.setCancelRequest(request.getParameter("cancelRequest"));
+        }else{
+            circForm.setCancelRequest("false");
+        }
+        showDialog("itemReplaceDialog", form, request, response);
+        return getUIFModelAndView(form);
+    }
 
     @RequestMapping(params = "methodToCall=checkForRequestExistsLostItemReplaceCopy")
     public ModelAndView checkForRequestExistsLostItemReplaceCopy(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
@@ -1209,7 +1221,7 @@ public class CircController extends CheckoutValidationController {
             else if (isRequestExists) {
                 showDialog("checkForRequestExistsLostItemReplaceCopyDialog", circForm, request, response);
             } else {
-                applyItemLostReplace(form,result,request,response);
+                showDialog("itemReplaceDialog", circForm, request, response);
             }
         }else {
             ErrorMessage errorMessage = new ErrorMessage();
@@ -1328,4 +1340,13 @@ public class CircController extends CheckoutValidationController {
         this.oleDeliverRequestDocumentHelperService = oleDeliverRequestDocumentHelperService;
     }
 
+    public OleLoanDocument getLoanDocument(String itemBarcode) {
+        HashMap<String, Object> criteriaMap = new HashMap<>();
+        criteriaMap.put("itemId", itemBarcode);
+        List<OleLoanDocument> oleLoanDocuments = (List<OleLoanDocument>) getBusinessObjectService().findMatching(OleLoanDocument.class, criteriaMap);
+        if (!CollectionUtils.isEmpty(oleLoanDocuments)) {
+            return oleLoanDocuments.get(0);
+        }
+        return null;
+    }
 }

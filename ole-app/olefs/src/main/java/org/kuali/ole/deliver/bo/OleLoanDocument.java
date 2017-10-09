@@ -199,6 +199,7 @@ public class OleLoanDocument extends PersistableBusinessObjectBase implements Co
     private String tempItemTypeId;
     private String itemsLocation;
     private String  itemLostNote;
+    private String  itemReplaceNote;
     private boolean isManualBill = false;
     private int noOfClaimsReturnedNoticesSent;
     private int claimsSearchCount;
@@ -2282,6 +2283,14 @@ public class OleLoanDocument extends PersistableBusinessObjectBase implements Co
 
     public void setItemLostNote(String itemLostNote) {
         this.itemLostNote = itemLostNote;
+    }
+
+    public String getItemReplaceNote() {
+        return itemReplaceNote;
+    }
+
+    public void setItemReplaceNote(String itemReplaceNote) {
+        this.itemReplaceNote = itemReplaceNote;
     }
 
     public boolean isManualBill() {
