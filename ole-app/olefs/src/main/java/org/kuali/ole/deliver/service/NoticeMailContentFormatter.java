@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -267,7 +266,6 @@ public abstract class NoticeMailContentFormatter {
 
         fileNames.add("notice.ftl");
         fileNames.add("itemInfo.ftl");
-        fileNames.add("replacement-bill.ftl");
 
         return fileNames;
     }
