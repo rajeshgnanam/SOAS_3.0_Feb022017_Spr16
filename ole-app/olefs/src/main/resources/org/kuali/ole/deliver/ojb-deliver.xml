@@ -716,6 +716,12 @@
         </reference-descriptor>
     </class-descriptor>
 
+
+    <class-descriptor class="org.kuali.ole.deliver.bo.BatchJobLastRunBo" table="OLE_BAT_JOB_LAST_RUN_T">
+        <field-descriptor name="id" column="ID" jdbc-type="INTEGER" primarykey="true" />
+        <field-descriptor name="lastRunTIme" column="JOBLASTRUNTIME" jdbc-type="TIMESTAMP"></field-descriptor>
+    </class-descriptor>
+
     <class-descriptor class="org.kuali.ole.deliver.bo.OleLoanDocument" table="ole_dlvr_loan_t">
         <field-descriptor name="loanId" column="LOAN_TRAN_ID " jdbc-type="VARCHAR" primarykey="true" index="true" autoincrement="true" sequence-name="ole_dlvr_loan_s"></field-descriptor>
         <field-descriptor name="circulationPolicyId" column="CIR_POLICY_ID" jdbc-type="VARCHAR"></field-descriptor>
