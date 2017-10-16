@@ -276,7 +276,7 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
             LOG.error("Exception occurred while generating file for Foreign Vendor");
             e.printStackTrace();
         }
-        invoiceFileRecord.savePreviousRunDate();
+        invoiceFileRecord.updateParameterforNextRunTimeAgresso();
     }
 
     public String getItemCostCentre(String formatType) {

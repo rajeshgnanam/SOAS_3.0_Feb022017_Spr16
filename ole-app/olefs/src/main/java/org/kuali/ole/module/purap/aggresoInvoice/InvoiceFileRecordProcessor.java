@@ -1,7 +1,12 @@
 package org.kuali.ole.module.purap.aggresoInvoice;
 
-import org.kuali.ole.deliver.bo.BatchJobLastRunBo;
+import org.kuali.ole.OLEConstants;
 import org.kuali.ole.docstore.common.util.DataSource;
+import org.kuali.ole.sys.context.SpringContext;
+import org.kuali.rice.coreservice.api.CoreServiceApiServiceLocator;
+import org.kuali.rice.coreservice.api.parameter.Parameter;
+import org.kuali.rice.coreservice.api.parameter.ParameterKey;
+import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.service.KRADServiceLocator;
 
@@ -12,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Calendar;
@@ -25,6 +31,11 @@ public class InvoiceFileRecordProcessor{
 
     final StringBuilder record;
     private BusinessObjectService businessObjectService;
+    protected ParameterService parameterService;
+
+    public void setParameterService(ParameterService parameterService) {
+        this.parameterService = parameterService;
+    }
 
     public InvoiceFileRecordProcessor(int recordSize) {
 
@@ -44,26 +55,19 @@ public class InvoiceFileRecordProcessor{
     }
 
     public Timestamp getPreviousRunDate(){
-        List<BatchJobLastRunBo> batchJobLastRunBoList = (List<BatchJobLastRunBo>) getBusinessObjectService().findAll(BatchJobLastRunBo.class);
-        if(batchJobLastRunBoList != null) {
-            BatchJobLastRunBo batchJobLastRunBo = batchJobLastRunBoList.get(0);
-            return batchJobLastRunBo.getLastRunTIme();
+        String parameter = getParameterAgresso(OLEConstants.AgressoCreateFile.LASTBATCHJOBRUNDATE);
+        if(parameter!=null){
+            SimpleDateFormat datetimeFormatter1 = new SimpleDateFormat(
+                    "yyyy-MM-dd hh:mm:ss");
+            try {
+                Date lastRunDate = datetimeFormatter1.parse(parameter);
+                return new Timestamp(lastRunDate.getTime());
+            } catch (ParseException e) {
+                //Do Nothing
+            }
+
         }
         return null;
-    }
-
-    public void savePreviousRunDate() {
-        BatchJobLastRunBo batchJobLastRunBo;
-        List<BatchJobLastRunBo> batchJobLastRunBoList = (List<BatchJobLastRunBo>) getBusinessObjectService().findAll(BatchJobLastRunBo.class);
-        if (batchJobLastRunBoList != null) {
-            batchJobLastRunBo = batchJobLastRunBoList.get(0);
-            batchJobLastRunBo.setLastRunTIme(new Timestamp(new Date().getTime()));
-        } else{
-            batchJobLastRunBo = new BatchJobLastRunBo();
-            batchJobLastRunBo.setId(1);
-            batchJobLastRunBo.setLastRunTIme(new Timestamp(new Date().getTime()));
-        }
-        getBusinessObjectService().save(batchJobLastRunBo);
     }
 
     public List<String> getInvoiceDocumentIds(){
@@ -120,5 +124,26 @@ public class InvoiceFileRecordProcessor{
 
     public String toString() {
         return record.toString();
+    }
+
+    public String getParameterAgresso(String name) {
+        ParameterKey parameterKey = ParameterKey.create(OLEConstants.APPL_ID, OLEConstants.SELECT_NMSPC, OLEConstants.SELECT_CMPNT,name);
+        Parameter parameter = CoreServiceApiServiceLocator.getParameterRepositoryService().getParameter(parameterKey);
+        if(parameter==null){
+            parameterKey = ParameterKey.create(OLEConstants.APPL_ID_OLE, OLEConstants.SELECT_NMSPC, OLEConstants.SELECT_CMPNT,name);
+            parameter = CoreServiceApiServiceLocator.getParameterRepositoryService().getParameter(parameterKey);
+        }
+        return parameter!=null?parameter.getValue():null;
+    }
+
+    public void updateParameterforNextRunTimeAgresso() {
+        parameterService = (ParameterService) SpringContext.getService("parameterService");
+        ParameterKey parameterKey = ParameterKey.create(OLEConstants.APPL_ID, OLEConstants.SELECT_NMSPC, OLEConstants.SELECT_CMPNT,OLEConstants.AgressoCreateFile.LASTBATCHJOBRUNDATE);
+        Parameter parameter = CoreServiceApiServiceLocator.getParameterRepositoryService().getParameter(parameterKey);
+        if ( parameter != null ) {
+            Parameter.Builder updatedParameter = Parameter.Builder.create(parameter);
+            updatedParameter.setValue(new Timestamp(new Date().getTime()).toString());
+            parameterService.updateParameter(updatedParameter.build());
+        }
     }
 }

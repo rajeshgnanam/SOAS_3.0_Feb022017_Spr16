@@ -3141,6 +3141,7 @@ public class OLEConstants {
         public static final String STATUS = getParameterAgresso("STATUS");
         public static final String APARTYPE = getParameterAgresso("APARTYPE");
         public static final String RESPONSIBLE = getParameterAgresso("RESPONSIBLE");
+        public static final String LASTBATCHJOBRUNDATE = "LAST_RUN_DATE_AGRESSOFILE";
         public static final String CURRENCYCODE = "GBP";
     }
     public static final class OleSerialReceivingTypeLoader {
