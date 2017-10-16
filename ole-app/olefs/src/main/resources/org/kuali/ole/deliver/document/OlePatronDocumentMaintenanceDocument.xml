@@ -1910,7 +1910,7 @@
                 <bean id="invalidOrLostStatusCode" parent="OlePatron-DataField" p:label="Status" p:propertyName="status" p:readOnly="true"/>
                 <bean id="invalidOrLostDescription" parent="OlePatron-DataField" p:label="Description" p:propertyName="description" p:readOnly="true"/>
                 <bean id="invalidOrLostStatusOperatorId" parent="OlePatron-DataField" p:label="Operator Name" p:propertyName="operatorName" p:readOnly="true"/>
-                <bean id="invalidOrLostReinstate" parent="OlePatron-InputField" p:label="Reinstate" p:propertyName="active"  p:readOnly="@{!document.newMaintainableObject.dataObject.expirationFlag}">
+                <bean id="invalidOrLostReinstate" parent="OlePatron-InputField" p:label="Reinstate" p:propertyName="active">
                     <property name="control">
                         <bean parent="Uif-CheckboxControl" p:onClickScript="reinstateDialog();" p:disabled="@{#line?.invalidOrLostBarcodeNumber eq document.newMaintainableObject.dataObject.barcode}"/>
                     </property>
