@@ -17,6 +17,7 @@ import org.kuali.ole.select.businessobject.OleInvoiceItem;
 import org.kuali.ole.select.document.OleInvoiceDocument;
 import org.kuali.ole.sys.context.SpringContext;
 import org.kuali.rice.core.api.config.property.ConfigContext;
+import org.kuali.rice.core.api.util.type.KualiDecimal;
 import org.kuali.rice.krad.service.KRADServiceLocator;
 
 import java.io.BufferedWriter;
@@ -104,12 +105,12 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
 
                         if (isForeignCurrency(currency)) {
                             if (document.getForeignVendorInvoiceAmount() != null) {
-                                invoiceAmount = "-" + (document.getForeignVendorInvoiceAmount().toString());
+                                invoiceAmount = "-" + document.getForeignVendorInvoiceAmount().multiply(new BigDecimal(100));
                                 invoiceTotalAmt = document.getForeignVendorInvoiceAmount();
                             }
                         } else {
                             if (document.getVendorInvoiceAmount() != null) {
-                                invoiceAmount = "-" + (document.getVendorInvoiceAmount().toString());
+                                invoiceAmount = "-" + document.getVendorInvoiceAmount().multiply(new KualiDecimal(100));
                                 invoiceTotalAmt = new BigDecimal(document.getVendorInvoiceAmount().toString());
                             }
                         }
@@ -142,12 +143,12 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
                                     dim_4 = accountMap.get(summaryAccount.getAccount().getAccountNumber());
                                     if (isForeignCurrency(currency)) {
                                         if (summaryAccount.getAccount().getForeignAmount() != null) {
-                                            itemAmount = summaryAccount.getAccount().getForeignAmount().toString();
+                                            itemAmount = ""+summaryAccount.getAccount().getForeignAmount().multiply(new BigDecimal(100));
                                             lineItemTotalAmt = lineItemTotalAmt.add(summaryAccount.getAccount().getForeignAmount());
                                         }
                                     } else {
                                         if (summaryAccount.getAccount().getAmount() != null) {
-                                            itemAmount = summaryAccount.getAccount().getAmount().toString();
+                                            itemAmount = ""+summaryAccount.getAccount().getAmount().multiply(new KualiDecimal(100));
                                             lineItemTotalAmt = lineItemTotalAmt.add(new BigDecimal(summaryAccount.getAccount().getAmount().toString()));
                                         }
                                     }
