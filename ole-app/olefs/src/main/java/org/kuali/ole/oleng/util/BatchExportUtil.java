@@ -213,11 +213,25 @@ public class BatchExportUtil extends BatchUtil {
                 } else if (StringUtils.isNotBlank(filterCriteriaList.get(i).getFieldNameText())) {
                     addDocType = true;
                     String filterFieldList[]=filterCriteriaList.get(i).getFieldNameText().split("\\$");
-                    if(filterFieldList.length==2) {
-                        if (getMarcRecordUtil().isControlField(filterFieldList[0].trim())) {
-                            queryBuilder.append("(" + OleNGConstants.CONTROL_FIELD_ + filterFieldList[0].trim() + ":" + filterCriteriaList.get(i).getFieldValue() + ")");
-                        } else {
-                            queryBuilder.append("(" + OleNGConstants.MDF_ + filterFieldList[0].trim() + filterFieldList[1] + ":" + filterCriteriaList.get(i).getFieldValue() + ")");
+                    if(filterCriteriaList != null && filterCriteriaList.size() > 0) {
+                        if(StringUtils.isNotBlank(filterCriteriaList.get(i).getFieldValue())) {
+                            if (getMarcRecordUtil().isControlField(filterFieldList[0].trim())) {
+                                queryBuilder.append("(" + OleNGConstants.CONTROL_FIELD_ + filterFieldList[0].trim() + ":" + filterCriteriaList.get(i).getFieldValue() + ")");
+                            } else {
+                                queryBuilder.append("(" + OleNGConstants.MDF_ + filterFieldList[0].trim() + filterFieldList[1] + ":" + filterCriteriaList.get(i).getFieldValue() + ")");
+                            }
+                        } else if (StringUtils.isNotBlank(filterCriteriaList.get(i).getRangeFrom()) && StringUtils.isNotBlank(filterCriteriaList.get(i).getRangeTo())){
+                            if (getMarcRecordUtil().isControlField(filterFieldList[0].trim())) {
+                                queryBuilder.append("(" + OleNGConstants.CONTROL_FIELD_ + filterFieldList[0].trim() + ":[" + filterCriteriaList.get(i).getRangeFrom() + " TO " + filterCriteriaList.get(i).getRangeTo() + "])");
+                            } else {
+                                queryBuilder.append("(" + OleNGConstants.MDF_ + filterFieldList[0].trim() + filterFieldList[1] + ":[" + filterCriteriaList.get(i).getRangeFrom() + " TO " + filterCriteriaList.get(i).getRangeTo() + "])");
+                            }
+                        } else if (StringUtils.isNotBlank(filterCriteriaList.get(i).getRangeFrom()) && StringUtils.isBlank(filterCriteriaList.get(i).getRangeTo())) {
+                            if (getMarcRecordUtil().isControlField(filterFieldList[0].trim())) {
+                                queryBuilder.append("(" + OleNGConstants.CONTROL_FIELD_ + filterFieldList[0].trim() + ":[" + filterCriteriaList.get(i).getRangeFrom() + " TO " + filterCriteriaList.get(i).getRangeTo() + "])");
+                            } else {
+                                queryBuilder.append("(" + OleNGConstants.MDF_ + filterFieldList[0].trim() + filterFieldList[1] + ":[" + filterCriteriaList.get(i).getRangeFrom() + " TO * ])");
+                            }
                         }
                     }
                 }
