@@ -49,6 +49,7 @@ import org.kuali.ole.docstore.model.enums.DocType;
 import org.kuali.ole.select.bo.OLEDonor;
 import org.kuali.ole.sys.context.SpringContext;
 import org.kuali.rice.core.api.config.property.ConfigContext;
+import org.kuali.rice.core.api.util.RiceConstants;
 import org.kuali.rice.kim.api.permission.PermissionService;
 import org.kuali.rice.kim.api.services.KimApiServiceLocator;
 import org.kuali.rice.krad.service.KRADServiceLocator;
@@ -473,7 +474,7 @@ public class EditorController extends UifControllerBase {
                     List<Note> noteList = item.getNote();
                     Note note = new Note();
                     note.setType("acquired");
-                    note.setValue(DocstoreConstants.DOCSTORE_DATE_FORMAT.format(new Date()));
+                    note.setValue(new SimpleDateFormat(RiceConstants.SIMPLE_DATE_FORMAT_FOR_DATE+OLEConstants.DATE_FORMAT_FOR_TIME_SEC +" a").format(new Date()));
                     noteList.add(note);
                     item.setNote(noteList);
                 }
@@ -844,7 +845,7 @@ public class EditorController extends UifControllerBase {
                         Item item = ((WorkInstanceOlemlForm) ((EditorForm) form).getDocumentForm()).getSelectedItem();
                         if(item!=null && item.getAccessInformation()!=null) {
                             String barcode = item.getAccessInformation().getBarcode();
-                            String date = DocstoreConstants.DOCSTORE_DATE_FORMAT.format(new Date());
+                            String date = new SimpleDateFormat(RiceConstants.SIMPLE_DATE_FORMAT_FOR_DATE+OLEConstants.DATE_FORMAT_FOR_TIME_SEC +" a").format(new Date());
                             List<Note> noteList = item.getNote();
                             List<Note> notes = new ArrayList<>();
                             if (noteList.size() > 0) {
