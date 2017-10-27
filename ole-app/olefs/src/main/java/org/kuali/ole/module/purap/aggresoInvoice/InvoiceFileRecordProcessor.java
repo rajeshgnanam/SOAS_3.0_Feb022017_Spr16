@@ -146,4 +146,29 @@ public class InvoiceFileRecordProcessor{
             parameterService.updateParameter(updatedParameter.build());
         }
     }
+
+    public List<String> isDocumentFinal(List<String> documentNbr){
+        List<String> documentNbrs = new ArrayList<>();
+        String document = "";
+        String prefix = "";
+        for(String doc : documentNbr) {
+            document = document +prefix+ doc ;
+            prefix =",";
+        }
+        ResultSet invoiceIdResultSet=null;
+        String query = "SELECT D.DOC_HDR_ID FROM KREW_DOC_HDR_T D WHERE D.DOC_HDR_STAT_CD = 'F' AND D.DOC_HDR_ID in("+document+");";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(query);
+            invoiceIdResultSet = statement.executeQuery(query);
+            while (invoiceIdResultSet.next()) {
+                documentNbrs.add(invoiceIdResultSet.getString(1));
+            }
+            statement.close();
+            getConnection().close();
+            return documentNbrs;
+        }catch (Exception e){
+            e.printStackTrace();
+            return documentNbrs;
+        }
+    }
 }

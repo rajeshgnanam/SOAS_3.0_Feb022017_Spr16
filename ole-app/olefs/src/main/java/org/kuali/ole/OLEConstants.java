@@ -3143,6 +3143,7 @@ public class OLEConstants {
         public static final String RESPONSIBLE = getParameterAgresso("RESPONSIBLE");
         public static final String LASTBATCHJOBRUNDATE = "LAST_RUN_DATE_AGRESSOFILE";
         public static final String CURRENCYCODE = "GBP";
+        public static final String GBP_INVOICES_EXTERNAL_DELIVERY_DIRECTORY = getParameterAgresso("GBP_INVOICES_EXTERNAL_DELIVERY_DIRECTORY");
     }
     public static final class OleSerialReceivingTypeLoader {
         public static final String SER_RCPT_HIS_REC_ID = "SER_RCPT_HIS_REC_ID";

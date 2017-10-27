@@ -8,12 +8,14 @@ import org.kuali.ole.DocumentUniqueIDPrefix;
 import org.kuali.ole.OLEConstants;
 import org.kuali.ole.coa.businessobject.Account;
 import org.kuali.ole.module.purap.businessobject.PurApSummaryItem;
+import org.kuali.ole.module.purap.businessobject.PurchaseOrderItem;
 import org.kuali.ole.module.purap.document.VendorCreditMemoDocument;
 import org.kuali.ole.module.purap.document.dataaccess.impl.CreditMemoDaoOjb;
 import org.kuali.ole.module.purap.service.impl.PurapAccountingServiceImpl;
 import org.kuali.ole.module.purap.util.SummaryAccount;
 import org.kuali.ole.select.businessobject.OleFormatType;
 import org.kuali.ole.select.businessobject.OleInvoiceItem;
+import org.kuali.ole.select.businessobject.OlePurchaseOrderItem;
 import org.kuali.ole.select.document.OleInvoiceDocument;
 import org.kuali.ole.sys.context.SpringContext;
 import org.kuali.rice.core.api.config.property.ConfigContext;
@@ -110,7 +112,7 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
                             }
                         } else {
                             if (document.getVendorInvoiceAmount() != null) {
-                                invoiceAmount = "-" + new BigDecimal(document.getVendorInvoiceAmount().multiply(new KualiDecimal(100)).toString()).setScale(0,BigDecimal.ROUND_DOWN);
+                                invoiceAmount = "-" + new BigDecimal(document.getVendorInvoiceAmount().multiply(new KualiDecimal(100)).toString()).setScale(0, BigDecimal.ROUND_DOWN);
                                 invoiceTotalAmt = new BigDecimal(document.getVendorInvoiceAmount().toString());
                             }
                         }
@@ -143,12 +145,12 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
                                     dim_4 = accountMap.get(summaryAccount.getAccount().getAccountNumber());
                                     if (isForeignCurrency(currency)) {
                                         if (summaryAccount.getAccount().getForeignAmount() != null) {
-                                            itemAmount = ""+summaryAccount.getAccount().getForeignAmount().multiply(new BigDecimal(100)).setScale(0,BigDecimal.ROUND_DOWN);
+                                            itemAmount = ""+summaryAccount.getAccount().getForeignAmount().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_DOWN);
                                             lineItemTotalAmt = lineItemTotalAmt.add(summaryAccount.getAccount().getForeignAmount());
                                         }
                                     } else {
                                         if (summaryAccount.getAccount().getAmount() != null) {
-                                            itemAmount = ""+new BigDecimal(summaryAccount.getAccount().getAmount().multiply(new KualiDecimal(100)).toString()).setScale(0,BigDecimal.ROUND_DOWN);
+                                            itemAmount = ""+new BigDecimal(summaryAccount.getAccount().getAmount().multiply(new KualiDecimal(100)).toString()).setScale(0, BigDecimal.ROUND_DOWN);
                                             lineItemTotalAmt = lineItemTotalAmt.add(new BigDecimal(summaryAccount.getAccount().getAmount().toString()));
                                         }
                                     }
@@ -220,63 +222,94 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
         CreditMemoDaoOjb creditMemoServiceDao = (CreditMemoDaoOjb) SpringContext.getService("creditMemoDao");
         List<VendorCreditMemoDocument> vendorCreditMemoDocumentList = creditMemoServiceDao.getCreditMemoByCriteria(previousRunDate);
         if(vendorCreditMemoDocumentList .size()>0) {
+            List<String> documentNbr = new ArrayList<>();
+            List<String> documentNumber = new ArrayList<>();
+            for (VendorCreditMemoDocument vendorCreditMemoDocument : vendorCreditMemoDocumentList ) {
+                documentNbr.add(vendorCreditMemoDocument.getDocumentNumber());
+            }
+            documentNumber = invoiceFileRecord.isDocumentFinal(documentNbr);
             for (VendorCreditMemoDocument vendorCreditMemoDocument : vendorCreditMemoDocumentList ) {
                 if(!vendorCreditMemoDocument.getVendorDetail().getVendorAliasesAsString().contains("pm21")) {
-                    String currencyAlphaCode = vendorCreditMemoDocument.getVendorDetail().getCurrencyType().getCurrencyAlphaCode();
-                    String creditmemoAmt = "";
-
-                    if(vendorCreditMemoDocument.getCreditMemoAmount() != null){
-                        creditmemoAmt = (new BigDecimal(vendorCreditMemoDocument.getCreditMemoAmount().multiply(new KualiDecimal(100)).toString()).setScale(0,BigDecimal.ROUND_DOWN)).toString();
-                    }
-
-                    String account = "";
-                    String description = "";
-                    if (vendorCreditMemoDocument.getPurchaseOrderDocument() != null) {
-                        description = vendorCreditMemoDocument.getCreditMemoNumber() + ";PO" + vendorCreditMemoDocument.getPurchaseOrderDocument().getPurapDocumentIdentifier();
-                    } else {
-                        description = vendorCreditMemoDocument.getCreditMemoNumber() + ";VENDOR" + vendorCreditMemoDocument.getVendorDetail().getVendorName();
-                    }
-                    String creditMemoNumber = vendorCreditMemoDocument.getDocumentNumber();
-                    aparId = vendorCreditMemoDocument.getVendorDetail().getVendorDunsNumber();
-                    if (vendorCreditMemoDocument.getCreditMemoDate() != null) {
-                        voucherDate = df.format(vendorCreditMemoDocument.getCreditMemoDate());
-                    }
-                    try {
-                        account = vendorCreditMemoDocument.getItem(0).getSourceAccountingLines().get(0).getAccount().getAccountNumber();
-                        account = accountMap.get(account);
-                    } catch (Exception e) {
-                        account = "";
-                    }
-                    if (isForeignCurrency(currencyAlphaCode)) {
-                        fileToWriteForeignVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.ITEM_TRANS_TYPE,
-                                OLEConstants.AgressoCreateFile.CLIENT, OLEConstants.AgressoCreateFile.INVOICEACCOUNT, OLEConstants.AgressoCreateFile.BLANK, account, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? "-" + creditmemoAmt : ""),
-                                (creditmemoAmt != null ? "-" + creditmemoAmt : ""), description, voucherDate, creditMemoNumber, voucherDate,
-                                voucherDate, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE + "\n"));
-                    } else {
-                        fileToWriteLocalVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.ITEM_TRANS_TYPE,
-                                OLEConstants.AgressoCreateFile.CLIENT, OLEConstants.AgressoCreateFile.INVOICEACCOUNT, OLEConstants.AgressoCreateFile.BLANK, account, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? "-" + creditmemoAmt : ""),
-                                (creditmemoAmt != null ? "-" + creditmemoAmt : ""), description, voucherDate, creditMemoNumber, voucherDate,
-                                OLEConstants.AgressoCreateFile.STATUS, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE + "\n"));
+                    if((documentNumber.contains(vendorCreditMemoDocument.getDocumentNumber()))) {
+                        String costCentre = "";
+                        String currencyAlphaCode = vendorCreditMemoDocument.getVendorDetail().getCurrencyType().getCurrencyAlphaCode();
+                        String creditmemoAmt = "";
+                        if (vendorCreditMemoDocument.getCreditMemoAmount() != null) {
+                            creditmemoAmt = (new BigDecimal(vendorCreditMemoDocument.getCreditMemoAmount().multiply(new KualiDecimal(100)).toString()).setScale(0, BigDecimal.ROUND_DOWN)).toString();
+                        }
+                        String account = "";
+                        String description = "";
+                        if (vendorCreditMemoDocument.getPurchaseOrderDocument() != null) {
+                            description = vendorCreditMemoDocument.getCreditMemoNumber() + ";PO" + vendorCreditMemoDocument.getPurchaseOrderDocument().getPurapDocumentIdentifier();
+                            OlePurchaseOrderItem purchaseOrderItem = (OlePurchaseOrderItem) vendorCreditMemoDocument.getPurchaseOrderDocument().getItem(0);
+                            costCentre = getItemCostCentre(purchaseOrderItem.getFormatTypeName().getFormatTypeName());
+                        } else {
+                            description = vendorCreditMemoDocument.getCreditMemoNumber() + ";VENDOR" + vendorCreditMemoDocument.getVendorDetail().getVendorName();
+                        }
+                        String creditMemoNumber = vendorCreditMemoDocument.getDocumentNumber();
+                        aparId = vendorCreditMemoDocument.getVendorDetail().getVendorDunsNumber();
+                        if (vendorCreditMemoDocument.getCreditMemoDate() != null) {
+                            voucherDate = df.format(vendorCreditMemoDocument.getCreditMemoDate());
+                        }
+                        try {
+                            account = vendorCreditMemoDocument.getItem(0).getSourceAccountingLines().get(0).getAccount().getAccountNumber();
+                            account = accountMap.get(account);
+                        } catch (Exception e) {
+                            account = "";
+                        }
+                        if(!description.contains("BARCLAYCARD")) {
+                            if (costCentre.equalsIgnoreCase("4025") || costCentre.equalsIgnoreCase("4026")) {
+                                if (isForeignCurrency(currencyAlphaCode)) {
+                                    fileToWriteForeignVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.INVOICE_TRANS_TYPE,
+                                            OLEConstants.AgressoCreateFile.CLIENT, OLEConstants.AgressoCreateFile.INVOICEACCOUNT, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? creditmemoAmt : ""),
+                                            (creditmemoAmt != null ? creditmemoAmt : ""), description, voucherDate, creditMemoNumber, voucherDate,
+                                            voucherDate, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE) + "\n");
+                                    fileToWriteForeignVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.ITEM_TRANS_TYPE,
+                                            OLEConstants.AgressoCreateFile.CLIENT, costCentre, OLEConstants.AgressoCreateFile.BLANK, account, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? "-" + creditmemoAmt : ""),
+                                            (creditmemoAmt != null ? "-" + creditmemoAmt : ""), description, voucherDate, creditMemoNumber, voucherDate,
+                                            voucherDate, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE) + "\n");
+                                } else {
+                                    fileToWriteLocalVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.INVOICE_TRANS_TYPE,
+                                            OLEConstants.AgressoCreateFile.CLIENT, OLEConstants.AgressoCreateFile.INVOICEACCOUNT, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? creditmemoAmt : ""),
+                                            (creditmemoAmt != null ? creditmemoAmt : ""), description, voucherDate, creditMemoNumber, voucherDate,
+                                            OLEConstants.AgressoCreateFile.STATUS, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE) + "\n");
+                                    fileToWriteLocalVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.ITEM_TRANS_TYPE,
+                                            OLEConstants.AgressoCreateFile.CLIENT, costCentre, OLEConstants.AgressoCreateFile.BLANK, account, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? "-" + creditmemoAmt : ""),
+                                            (creditmemoAmt != null ? "-" + creditmemoAmt : ""), description, voucherDate, creditMemoNumber, voucherDate,
+                                            OLEConstants.AgressoCreateFile.STATUS, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE) + "\n");
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
+        String path = OLEConstants.AgressoCreateFile.GBP_INVOICES_EXTERNAL_DELIVERY_DIRECTORY;
         try {
-            generateFileForContent(fileToWriteLocalVendor, batchId.concat("_local"),"/Agresso/LocalVendor/");
+            generateFileForContent(fileToWriteLocalVendor, "LibraryInvoices_"+batchId.concat("_local"),"/Agresso/");
+            if(StringUtils.isNotBlank(path)) {
+                generateFile(fileToWriteLocalVendor, "LibraryInvoices_" + batchId.concat("_local"), path);
+            }
             fileToWriteLocalVendor.setLength(0);
         } catch (Exception e) {
             LOG.error("Exception occurred while generating file for Local Vendor");
             e.printStackTrace();
         }
         try {
-            generateFileForContent(fileToWriterrorText, batchId.concat("_error"),"/Agresso/ErrorFiles/");
+            generateFileForContent(fileToWriterrorText, "LibraryInvoices_"+batchId.concat("_error"),"/Agresso/");
+            if(StringUtils.isNotBlank(path)) {
+                generateFile(fileToWriterrorText, "LibraryInvoices_" + batchId.concat("_error"), path);
+            }
             fileToWriteLocalVendor.setLength(0);
         } catch (Exception e) {
             LOG.error("Exception occurred while generating file for Local Vendor");
             e.printStackTrace();
         }
         try {
-            generateFileForContent(fileToWriteForeignVendor, batchId.concat("_foreign"),"/Agresso/Foreignvendor/");
+            generateFileForContent(fileToWriteForeignVendor, "LibraryInvoices_"+batchId.concat("_foreign"),"/Agresso/");
+            if(StringUtils.isNotBlank(path)) {
+                generateFile(fileToWriteForeignVendor, "LibraryInvoices_" + batchId.concat("_foreign"), path);
+            }
             fileToWriteForeignVendor.setLength(0);
         } catch (Exception e) {
             LOG.error("Exception occurred while generating file for Foreign Vendor");
@@ -348,8 +381,29 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
             File dirFile = new File(path + filePath);
             if (!dirFile.exists()) {
                 dirFile.getParentFile().mkdirs();
-                dirFile.mkdir();            }
-            File batFile = new File(dirFile + "/" + fileName + ".dat");
+                dirFile.mkdir();
+            }
+            File batFile = new File(dirFile + "/" + fileName + ".txt");
+            if (!batFile.exists()) {
+                batFile.createNewFile();
+            }
+            FileWriter fw = new FileWriter(batFile.getAbsoluteFile(), true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(fileContent.toString());
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void generateFile(StringBuilder fileContent, String fileName, String filePath) throws IOException {
+        try {
+            File dirFile = new File(filePath);
+            if (!dirFile.exists()) {
+                dirFile.getParentFile().mkdirs();
+                dirFile.mkdir();
+            }
+            File batFile = new File(dirFile + "/" + fileName + ".txt");
             if (!batFile.exists()) {
                 batFile.createNewFile();
             }
