@@ -262,7 +262,7 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
                                 if (isForeignCurrency(currencyAlphaCode)) {
                                     fileToWriteForeignVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.INVOICE_TRANS_TYPE,
                                             OLEConstants.AgressoCreateFile.CLIENT, OLEConstants.AgressoCreateFile.INVOICEACCOUNT, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? creditmemoAmt : ""),
-                                            (creditmemoAmt != null ? creditmemoAmt : ""), description, voucherDate, creditMemoNumber, voucherDate,
+                                            (creditmemoAmt != null ? creditmemoAmt : ""), OLEConstants.AgressoCreateFile.BLANK, voucherDate, creditMemoNumber, voucherDate,
                                             voucherDate, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE) + "\n");
                                     fileToWriteForeignVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.ITEM_TRANS_TYPE,
                                             OLEConstants.AgressoCreateFile.CLIENT, costCentre, OLEConstants.AgressoCreateFile.BLANK, account, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? "-" + creditmemoAmt : ""),
@@ -271,7 +271,7 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
                                 } else {
                                     fileToWriteLocalVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.INVOICE_TRANS_TYPE,
                                             OLEConstants.AgressoCreateFile.CLIENT, OLEConstants.AgressoCreateFile.INVOICEACCOUNT, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? creditmemoAmt : ""),
-                                            (creditmemoAmt != null ? creditmemoAmt : ""), description, voucherDate, creditMemoNumber, voucherDate,
+                                            (creditmemoAmt != null ? creditmemoAmt : ""), OLEConstants.AgressoCreateFile.BLANK, voucherDate, creditMemoNumber, voucherDate,
                                             OLEConstants.AgressoCreateFile.STATUS, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE) + "\n");
                                     fileToWriteLocalVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.ITEM_TRANS_TYPE,
                                             OLEConstants.AgressoCreateFile.CLIENT, costCentre, OLEConstants.AgressoCreateFile.BLANK, account, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? "-" + creditmemoAmt : ""),
