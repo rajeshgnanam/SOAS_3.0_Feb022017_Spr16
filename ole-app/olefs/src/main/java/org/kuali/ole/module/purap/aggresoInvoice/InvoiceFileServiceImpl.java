@@ -73,7 +73,7 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
         String invoiceContent = "";
         String itemLineContent = "";
         Map<String, String> accountMap = new HashMap<>();
-        DateFormat df = new SimpleDateFormat("yyyyMMdd_hhmmss");
+        DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
         batchId = "INV_" + df.format(new Date());
         List<Account> accounts = (List<Account>) KRADServiceLocator.getBusinessObjectService().findAll(Account.class);
         if (CollectionUtils.isNotEmpty(accounts) && accounts.size() > 0) {
@@ -285,6 +285,7 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
             }
         }
         String path = OLEConstants.AgressoCreateFile.GBP_INVOICES_EXTERNAL_DELIVERY_DIRECTORY;
+        batchId = batchId.replace("INV_","");
         try {
             generateFileForContent(fileToWriteLocalVendor, "LibraryInvoices_"+batchId.concat("_local"),"/Agresso/");
             if(StringUtils.isNotBlank(path)) {
