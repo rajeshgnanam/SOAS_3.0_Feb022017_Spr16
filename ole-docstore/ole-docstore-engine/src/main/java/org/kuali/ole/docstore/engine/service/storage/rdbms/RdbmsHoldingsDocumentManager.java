@@ -466,6 +466,8 @@ public class RdbmsHoldingsDocumentManager extends RdbmsAbstarctDocumentManager {
             } else if(StringUtils.isEmpty(callNumber.getNumber())){
                 if (callNumber.getShelvingOrder() != null) {
                     holdingsRecord.setShelvingOrder(callNumber.getShelvingOrder().getFullValue());
+                } else {
+                    callNumber.setShelvingScheme(new ShelvingScheme());
                 }
                 callNumber.getShelvingScheme().setFullValue("");
                 CallNumberTypeRecord callNumberTypeRecord = saveCallNumberTypeRecord(callNumber.getShelvingScheme());
