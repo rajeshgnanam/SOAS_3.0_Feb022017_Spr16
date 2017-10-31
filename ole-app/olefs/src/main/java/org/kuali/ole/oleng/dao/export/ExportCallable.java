@@ -417,6 +417,7 @@ public abstract class ExportCallable implements Callable {
                 item.setId("wio-" + resultSet.getString("ITEM_ID"));
                 item.setContentObject(itemObj);
                 Location location = RebuildIndexUtil.getLocationDetails(resultSet.getString("LOCATION"), resultSet.getString("LOCATION_LEVEL"));
+                itemObj.setItemIdentifier( resultSet.getString("ITEM_ID"));
                 itemObj.setLocation(location);
                 CallNumber callNumber = new CallNumber();
                 callNumber.setNumber(resultSet.getString("CALL_NUMBER"));
