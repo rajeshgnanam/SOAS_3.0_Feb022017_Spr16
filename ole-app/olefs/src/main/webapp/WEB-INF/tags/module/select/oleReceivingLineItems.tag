@@ -472,7 +472,7 @@
                         alt="Receive" title="Receive"
                         styleClass="tinybutton"  />
                 </td>
-           <%-- </c:if>--%>
+           </c:if>
         </c:if>
         <c:if test="${KualiForm.document.items[ctr].copyList[0].receiptStatus eq 'Received'}">
             <th>Receipt Status:</th>
@@ -492,7 +492,7 @@
                         tabindexOverride="${tabindexOverrideBase + 0}" readOnly="true"/>
             </td>
         </c:if>
-    </c:if>
+    <%--</c:if>--%>
 
         <%-- <kul:htmlAttributeHeaderCell
             attributeEntry="${itemAttributes.receiptStatusId}" colspan="1" width="15%"/>
