@@ -127,7 +127,7 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
                         invoiceContent = getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.INVOICE_TRANS_TYPE, OLEConstants.AgressoCreateFile.CLIENT, OLEConstants.AgressoCreateFile.INVOICEACCOUNT,
                                 OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.TAXCODE, (currency != null ? currency : ""), (invoiceAmount != null ? invoiceAmount : ""), (invoiceAmount != null ? invoiceAmount : ""),
                                 (invoiceDescription != null ? invoiceDescription : ""),
-                                (voucherDate != null ? voucherDate : ""), voucherNumber+"",
+                                (voucherDate != null ? voucherDate : ""),  String.format ("%015d", voucherNumber),
                                 (extInvoiceReference != null ? extInvoiceReference : ""),
                                 (invoiceDueDate != null ? invoiceDueDate : ""),
                                 OLEConstants.AgressoCreateFile.STATUS, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"),
@@ -138,10 +138,11 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
                         } else {
                             tmpFileToWriteLocalVendor.append(invoiceContent);
                         }
-                        List<SummaryAccount> summaryAccounts = generateSummaryAccounts(document.getItems(), ZERO_TOTALS_RETURNED_VALUE, USE_TAX_INCLUDED);
+                        List<SummaryAccount> summaryAccounts = generateSummaryAccounts1(document.getItems(), ZERO_TOTALS_RETURNED_VALUE, USE_TAX_INCLUDED);
                         if (CollectionUtils.isNotEmpty(summaryAccounts) && summaryAccounts.size() > 0) {
                             for (SummaryAccount summaryAccount : summaryAccounts) {
                                 itemLineContent = "";
+                                String itemTaxcode ="0";
                                 itemDescription = document.getDocumentNumber() + ";";
                                 if (summaryAccount != null && summaryAccount.getAccount() != null) {
                                     dim_4 = accountMap.get(summaryAccount.getAccount().getAccountNumber());
@@ -166,6 +167,11 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
                                                 itemCostCentre = getItemCostCentre(oleInvoiceItem.getFormatType().getFormatTypeName());
                                                 if (StringUtils.isNotBlank(itemCostCentre)) {
                                                     if (itemCostCentre.equalsIgnoreCase("4025") || itemCostCentre.equalsIgnoreCase("4026")) {
+                                                        if(itemCostCentre.equalsIgnoreCase("4025")){
+                                                            itemTaxcode ="Z";
+                                                        } else {
+                                                            itemTaxcode ="SP";
+                                                        }
                                                     } else {
                                                         addFileInfo = false;
                                                     }
@@ -178,10 +184,10 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
                                     itemLineContent = getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.ITEM_TRANS_TYPE,
                                             OLEConstants.AgressoCreateFile.CLIENT, itemCostCentre != null ? itemCostCentre : "", OLEConstants.AgressoCreateFile.BLANK,
                                             dim_4 != null ? dim_4 : "",
-                                            OLEConstants.AgressoCreateFile.TAXCODE, currency, itemAmount != null ? itemAmount : "0",
+                                            itemTaxcode, currency, itemAmount != null ? itemAmount : "0",
                                             itemAmount != null ? itemAmount : "0",
                                             itemDescription != null ? itemDescription : "",
-                                            voucherDate, voucherNumber+"", extInvoiceReference, invoiceDueDate, OLEConstants.AgressoCreateFile.STATUS, OLEConstants.AgressoCreateFile.APARTYPE,
+                                            voucherDate, String.format ("%015d", voucherNumber), extInvoiceReference, invoiceDueDate, OLEConstants.AgressoCreateFile.STATUS, OLEConstants.AgressoCreateFile.APARTYPE,
                                             (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE) + "\n";
 
 
@@ -191,12 +197,6 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
                                         tmpFileToWriteLocalVendor.append(itemLineContent);
                                     }
                                 }
-                            }
-                        }
-                        if(addFileInfo){
-                            if(!invoiceTotalAmt.equals(lineItemTotalAmt)){
-                                addErrFile = false;
-                                addFileInfo = false;
                             }
                         }
                     }
@@ -265,20 +265,20 @@ public class InvoiceFileServiceImpl extends PurapAccountingServiceImpl {
                                 if (isForeignCurrency(currencyAlphaCode)) {
                                     fileToWriteForeignVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.INVOICE_TRANS_TYPE,
                                             OLEConstants.AgressoCreateFile.CLIENT, OLEConstants.AgressoCreateFile.INVOICEACCOUNT, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? creditmemoAmt : ""),
-                                            (creditmemoAmt != null ? creditmemoAmt : ""), OLEConstants.AgressoCreateFile.BLANK, voucherDate, voucherNumber+"", creditMemoNumber, voucherDate,
+                                            (creditmemoAmt != null ? creditmemoAmt : ""), OLEConstants.AgressoCreateFile.BLANK, voucherDate, String.format ("%015d", voucherNumber), creditMemoNumber, voucherDate,
                                             voucherDate, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE) + "\n");
                                     fileToWriteForeignVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.ITEM_TRANS_TYPE,
                                             OLEConstants.AgressoCreateFile.CLIENT, costCentre, OLEConstants.AgressoCreateFile.BLANK, account, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? "-" + creditmemoAmt : ""),
-                                            (creditmemoAmt != null ? "-" + creditmemoAmt : ""), description, voucherDate, voucherNumber+"", creditMemoNumber, voucherDate,
+                                            (creditmemoAmt != null ? "-" + creditmemoAmt : ""), description, voucherDate, String.format ("%015d", voucherNumber), creditMemoNumber, voucherDate,
                                             voucherDate, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE) + "\n");
                                 } else {
                                     fileToWriteLocalVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.INVOICE_TRANS_TYPE,
                                             OLEConstants.AgressoCreateFile.CLIENT, OLEConstants.AgressoCreateFile.INVOICEACCOUNT, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.BLANK, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? creditmemoAmt : ""),
-                                            (creditmemoAmt != null ? creditmemoAmt : ""), OLEConstants.AgressoCreateFile.BLANK, voucherDate, voucherNumber+"", creditMemoNumber, voucherDate,
+                                            (creditmemoAmt != null ? creditmemoAmt : ""), OLEConstants.AgressoCreateFile.BLANK, voucherDate, String.format ("%015d", voucherNumber), creditMemoNumber, voucherDate,
                                             OLEConstants.AgressoCreateFile.STATUS, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE) + "\n");
                                     fileToWriteLocalVendor.append(getFileContent(batchId, OLEConstants.AgressoCreateFile.INTER_FACE, OLEConstants.AgressoCreateFile.VOUCHER_TYPE, OLEConstants.AgressoCreateFile.ITEM_TRANS_TYPE,
                                             OLEConstants.AgressoCreateFile.CLIENT, costCentre, OLEConstants.AgressoCreateFile.BLANK, account, OLEConstants.AgressoCreateFile.TAXCODE, currencyAlphaCode, (creditmemoAmt != null ? "-" + creditmemoAmt : ""),
-                                            (creditmemoAmt != null ? "-" + creditmemoAmt : ""), description, voucherDate, voucherNumber+"", creditMemoNumber, voucherDate,
+                                            (creditmemoAmt != null ? "-" + creditmemoAmt : ""), description, voucherDate, String.format ("%015d", voucherNumber), creditMemoNumber, voucherDate,
                                             OLEConstants.AgressoCreateFile.STATUS, OLEConstants.AgressoCreateFile.APARTYPE, (aparId != null ? aparId : "10000"), OLEConstants.AgressoCreateFile.RESPONSIBLE) + "\n");
                                 }
                             }
