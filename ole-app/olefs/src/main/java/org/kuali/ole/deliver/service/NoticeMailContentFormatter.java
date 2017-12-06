@@ -255,7 +255,7 @@ public abstract class NoticeMailContentFormatter {
         oleNoticeBo.setItemInstitution(getLocationName(locationMap.get(OLEConstants.ITEM_INSTITUTION)));
         oleNoticeBo.setItemCampus(getLocationName(locationMap.get(OLEConstants.ITEM_CAMPUS)));
         oleNoticeBo.setItemCollection(getLocationName(locationMap.get(OLEConstants.ITEM_COLLECTION)));
-        oleNoticeBo.setItemLibrary(getLocationName(locationMap.get(OLEConstants.ITEM_LIBRARY)));
+        oleNoticeBo.setItemLibrary(getLocationName(locationMap.get(OLEConstants.ITEM_SHELVING)));
         oleNoticeBo.setItemLocation(getLocationName(locationMap.get(OLEConstants.ITEM_SHELVING)));
         oleNoticeBo.setItemShelvingLocation(getLocationName(locationMap.get(OLEConstants.ITEM_SHELVING)));
         return oleNoticeBo;
