@@ -222,6 +222,9 @@ public class OLEClaimedReturnedItemsController extends UifControllerBase {
                 GlobalVariables.getMessageMap().putInfo(KRADConstants.GLOBAL_MESSAGES, OLEConstants.RECORD_UPDATED_SUCCESSFULLY);
             }
         }
+        if(!StringUtils.isNotBlank(isBillForItem)) {
+            oleClaimedReturnedItemsForm.setLightboxScript("jq.fancybox.close();");
+        }
         return getUIFModelAndView(oleClaimedReturnedItemsForm, "OLEClaimedReturnedItemsViewPage");
     }
 
