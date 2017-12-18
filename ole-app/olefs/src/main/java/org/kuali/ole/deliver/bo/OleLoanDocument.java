@@ -205,8 +205,10 @@ public class OleLoanDocument extends PersistableBusinessObjectBase implements Co
     private int noOfClaimsReturnedNoticesSent;
     private int claimsSearchCount;
     private Timestamp lastClaimsReturnedSearchedDate;
-
-
+    private String feeTypeName;
+    private String fineBillNumber;
+    private Double fineAmount;
+    private Timestamp fineItemDue;
 
 
     public String getItemTypeId() {
@@ -1122,6 +1124,39 @@ public class OleLoanDocument extends PersistableBusinessObjectBase implements Co
      */
     public void setBorrowerTypeName(String borrowerTypeName) {
         this.borrowerTypeName = borrowerTypeName;
+    }
+
+
+    public String getFeeTypeName() {
+        return feeTypeName;
+    }
+
+    public void setFeeTypeName(String feeTypeName) {
+        this.feeTypeName = feeTypeName;
+    }
+
+    public String getFineBillNumber() {
+        return fineBillNumber;
+    }
+
+    public void setFineBillNumber(String fineBillNumber) {
+        this.fineBillNumber = fineBillNumber;
+    }
+
+    public Double getFineAmount() {
+        return fineAmount;
+    }
+
+    public void setFineAmount(Double fineAmount) {
+        this.fineAmount = fineAmount;
+    }
+
+    public Timestamp getFineItemDue() {
+        return fineItemDue;
+    }
+
+    public void setFineItemDue(Timestamp fineItemDue) {
+        this.fineItemDue = fineItemDue;
     }
 
     /**
