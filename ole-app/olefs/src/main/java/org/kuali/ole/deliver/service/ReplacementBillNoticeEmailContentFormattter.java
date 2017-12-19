@@ -13,7 +13,7 @@ public class ReplacementBillNoticeEmailContentFormattter extends NoticeMailConte
         oleNoticeBo.setNoticeTitle("Lost");
         oleNoticeBo.setBillNumber(oleLoanDocument.getRepaymentFeePatronBillId());
         oleNoticeBo.setFeeType(OLEConstants.REPLACEMENT_FEE);
-        oleNoticeBo.setFeeAmount(oleLoanDocument.getReplacementBill());
+        oleNoticeBo.setFeeAmount(oleLoanDocument.getReplacementBill().toString());
     }
 
 }
